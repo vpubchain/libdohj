@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.dogecoin</groupId>
         <artifactId>dogecoinj-parent</artifactId>
-        <version>0.13-SNAPSHOT</version>
+        <version>0.14-dogethereum-1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
