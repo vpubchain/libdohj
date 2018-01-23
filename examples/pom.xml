@@ -19,8 +19,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.dogecoin</groupId>
-        <artifactId>dogecoinj-parent</artifactId>
+        <groupId>org.libdohj</groupId>
+        <artifactId>libdohj-parent</artifactId>
         <version>0.14-dogethereum-1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.6</version>
+            <version>1.7.7</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
