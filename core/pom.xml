@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.libdohj</groupId>
     <artifactId>libdohj-core</artifactId>
-    <version>0.14-dogethereum-1</version>
+    <version>0.14-dogethereum-2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <licenses>
@@ -119,4 +119,12 @@
         <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
     <name>libdohj</name>
+    <repositories>
+        <repository>
+            <id>dogethereumGithub</id>
+            <name>Dogethereum Github</name>
+            <url>https://raw.github.com/dogethereum/maven-repo/master/</url>
+        </repository>
+    </repositories>
+
 </project>

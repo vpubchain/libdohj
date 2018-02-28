@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.libdohj</groupId>
     <artifactId>libdohj-parent</artifactId>
-    <version>0.14-dogethereum-1</version>
+    <version>0.14-dogethereum-2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -236,5 +236,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
