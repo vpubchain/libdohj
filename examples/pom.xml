@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.libdohj</groupId>
         <artifactId>libdohj-parent</artifactId>
-        <version>0.14-dogethereum-2</version>
+        <version>0.14-dogethereum-3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
