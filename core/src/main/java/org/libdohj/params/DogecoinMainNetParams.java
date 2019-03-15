@@ -17,6 +17,7 @@
 package org.libdohj.params;
 
 import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.Utils;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -28,21 +29,28 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
     public static final int MAINNET_MAJORITY_WINDOW = 2000;
     public static final int MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED = 1900;
     public static final int MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 1500;
-    protected static final int DIFFICULTY_CHANGE_TARGET = 145000;
 
     public DogecoinMainNetParams() {
-        super(DIFFICULTY_CHANGE_TARGET);
+        super();
+        interval = INTERVAL;
+        targetTimespan = TARGET_TIMESPAN;
+        maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
+
+
         dumpedPrivateKeyHeader = 158; //This is always addressHeader + 128
         addressHeader = 30;
         p2shHeader = 22;
-        acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
+
         port = 22556;
         packetMagic = 0xc0c0c0c0;
-        // Note that while BIP44 makes HD wallets chain-agnostic, for legacy
-        // reasons we use a Doge-specific header for main net. At some point
-        // we'll add independent headers for BIP32 legacy and BIP44.
-        bip32HeaderPub = 0x02facafd; //The 4 byte header that serializes in base58 to "dgub".
-        bip32HeaderPriv =  0x02fac398; //The 4 byte header that serializes in base58 to "dgpv".
+
+
+        segwitAddressHrp = "sys";
+        bip32HeaderP2PKHpub = 0x0488b21e; // The 4 byte header that serializes in base58 to "xpub".
+        bip32HeaderP2PKHpriv = 0x0488ade4; // The 4 byte header that serializes in base58 to "xprv"
+        bip32HeaderP2WPKHpub = 0x04b24746; // The 4 byte header that serializes in base58 to "zpub".
+        bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
+
         genesisBlock.setDifficultyTarget(0x1e0ffff0L);
         genesisBlock.setTime(1386325540L);
         genesisBlock.setNonce(99943L);
@@ -50,11 +58,9 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         subsidyDecreaseBlockCount = 100000;
         spendableCoinbaseDepth = 100;
 
-        // Note this is an SHA256 hash, not a Scrypt hash. Scrypt hashes are only
-        // used in difficulty calculations.
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("1a91e3dace36e2be3bf030a65679fe821aa1d6ef92e7c9902eb318182c355691"),
-                genesisHash);
+       /* checkState(genesisHash.equals("1a91e3dace36e2be3bf030a65679fe821aa1d6ef92e7c9902eb318182c355691"),
+                genesisHash);*/
 
         majorityEnforceBlockUpgrade = MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
         majorityRejectBlockOutdated = MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED;

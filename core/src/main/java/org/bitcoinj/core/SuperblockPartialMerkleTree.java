@@ -1,6 +1,7 @@
-/**
- * Copyright 2011 Google Inc.
- * Copyright 2014 Andreas Schildbach
+/*
+ * Copyright 2012 The Bitcoin Developers
+ * Copyright 2012 Matt Corallo
+ * Copyright 2015 Andreas Schildbach
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,254 +18,434 @@
 
 package org.bitcoinj.core;
 
-import org.libdohj.core.AltcoinNetworkParameters;
-
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.util.BitSet;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-
-import org.libdohj.core.AuxPoWNetworkParameters;
+import static org.bitcoinj.core.Utils.*;
+import com.google.common.base.Objects;
 
 /**
- * <p>A block is a group of transactions, and is one of the fundamental data structures of the Bitcoin system.
- * It records a set of {@link Transaction}s together with some data that links it into a place in the global block
- * chain, and proves that a difficult calculation was done over its contents. See
- * <a href="http://www.bitcoin.org/bitcoin.pdf">the Bitcoin technical paper</a> for
- * more detail on blocks. <p/>
+ * <p>A data structure that contains proofs of block inclusion for one or more transactions, in an efficient manner.</p>
  *
- * To get a block, you can either build one from the raw bytes you can get from another implementation, or request one
- * specifically using {@link Peer#getBlock(Sha256Hash)}, or grab one from a downloaded {@link BlockChain}.
+ * <p>The encoding works as follows: we traverse the tree in depth-first order, storing a bit for each traversed node,
+ * signifying whether the node is the parent of at least one matched leaf txid (or a matched txid itself). In case we
+ * are at the leaf level, or this bit is 0, its merkle node hash is stored, and its children are not explored further.
+ * Otherwise, no hash is stored, but we recurse into both (or the only) child branch. During decoding, the same
+ * depth-first traversal is performed, consuming bits and hashes as they were written during encoding.</p>
+ *
+ * <p>The serialization is fixed and provides a hard guarantee about the encoded size,
+ * {@code SIZE <= 10 + ceil(32.25*N)} where N represents the number of leaf nodes of the partial tree. N itself
+ * is bounded by:</p>
+ *
+ * <p>
+ * N &lt;= total_transactions<br>
+ * N &lt;= 1 + matched_transactions*tree_height
+ * </p>
+ *
+ * <p>The serialization format:</p>
+ * <pre>
+ *  - uint32     total_transactions (4 bytes)
+ *  - varint     number of hashes   (1-3 bytes)
+ *  - uint256[]  hashes in depth-first order (&lt;= 32*N bytes)
+ *  - varint     number of bytes of flag bits (1-3 bytes)
+ *  - byte[]     flag bits, packed per 8 in a byte, least significant bit first (&lt;= 2*N-1 bits)
+ * </pre>
+ * <p>The size constraints follow from this.</p>
+ *
+ * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
-public class AltcoinBlock extends org.bitcoinj.core.Block {
-    private static final int BYTE_BITS = 8;
+public class SuperblockPartialMerkleTree extends Message {
+    // the total number of transactions in the block
+    private int transactionCount;
 
-    private boolean auxpowParsed = false;
-    private boolean auxpowBytesValid = false;
+    // node-is-parent-of-matched-txid bits
+    private byte[] matchedChildBits;
 
-    /** AuxPoW header element, if applicable. */
-    @Nullable private AuxPoW auxpow;
+    // txids and internal hashes
+    private List<Sha256Hash> hashes;
 
-    /**
-     * Whether the chain this block belongs to support AuxPoW, used to avoid
-     * repeated instanceof checks. Initialised in parseTransactions()
-     */
-    private boolean auxpowChain = false;
-
-
-    /** Special case constructor, used for the genesis node, cloneAsHeader and unit tests.
-     * @param params NetworkParameters object.
-     */
-    public AltcoinBlock(final NetworkParameters params, final long version) {
-        super(params, version);
-    }
-
-    /** Special case constructor, used for the genesis node, cloneAsHeader and unit tests.
-     * @param params NetworkParameters object.
-     */
-    public AltcoinBlock(final NetworkParameters params, final byte[] payloadBytes) {
-        this(params, payloadBytes, 0, params.getDefaultSerializer(), payloadBytes.length);
+    public SuperblockPartialMerkleTree(NetworkParameters params, byte[] payloadBytes, int offset) throws ProtocolException {
+        super(params, payloadBytes, offset);
     }
 
     /**
-     * Construct a block object from the Bitcoin wire format.
-     * @param params NetworkParameters object.
-     * @param serializer the serializer to use for this message.
-     * @param length The length of message if known.  Usually this is provided when deserializing of the wire
-     * as the length will be provided as part of the header.  If unknown then set to Message.UNKNOWN_LENGTH
-     * @throws ProtocolException
+     * Constructs a new PMT with the given bit set (little endian) and the raw list of hashes including internal hashes,
+     * taking ownership of the list.
      */
-    public AltcoinBlock(final NetworkParameters params, final byte[] payloadBytes,
-            final int offset, final MessageSerializer serializer, final int length)
-            throws ProtocolException {
-        super(params, payloadBytes, offset, serializer, length);
-    }
-
-    public AltcoinBlock(NetworkParameters params, byte[] payloadBytes, int offset,
-        Message parent, MessageSerializer serializer, int length)
-        throws ProtocolException {
-        super(params, payloadBytes, serializer, length);
+    public SuperblockPartialMerkleTree(NetworkParameters params, byte[] bits, List<Sha256Hash> hashes, int origTxCount) {
+        super(params);
+        this.matchedChildBits = bits;
+        this.hashes = hashes;
+        this.transactionCount = origTxCount;
     }
 
     /**
-     * Construct a block initialized with all the given fields.
-     * @param params Which network the block is for.
-     * @param version This should usually be set to 1 or 2, depending on if the height is in the coinbase input.
-     * @param prevBlockHash Reference to previous block in the chain or {@link Sha256Hash#ZERO_HASH} if genesis.
-     * @param merkleRoot The root of the merkle tree formed by the transactions.
-     * @param time UNIX time when the block was mined.
-     * @param difficultyTarget Number which this block hashes lower than.
-     * @param nonce Arbitrary number to make the block hash lower than the target.
-     * @param transactions List of transactions including the coinbase.
+     * Calculates a PMT given the list of leaf hashes and which leaves need to be included. The relevant interior hashes
+     * are calculated and a new PMT returned.
      */
-    public AltcoinBlock(NetworkParameters params, long version, Sha256Hash prevBlockHash, Sha256Hash merkleRoot, long time,
-                 long difficultyTarget, long nonce, List<Transaction> transactions) {
-        super(params, version, prevBlockHash, merkleRoot, time, difficultyTarget, nonce, transactions);
+    public static SuperblockPartialMerkleTree buildFromLeaves(NetworkParameters params, byte[] includeBits, List<Sha256Hash> allLeafHashes) {
+        // Calculate height of the tree.
+        int height = 0;
+        while (getTreeWidth(allLeafHashes.size(), height) > 1)
+            height++;
+        List<Boolean> bitList = new ArrayList<Boolean>();
+        List<Sha256Hash> hashes = new ArrayList<Sha256Hash>();
+        traverseAndBuild(height, 0, allLeafHashes, includeBits, bitList, hashes);
+        byte[] bits = new byte[(int)Math.ceil(bitList.size() / 8.0)];
+        for (int i = 0; i < bitList.size(); i++)
+            if (bitList.get(i))
+                Utils.setBitLE(bits, i);
+        return new SuperblockPartialMerkleTree(params, bits, hashes, allLeafHashes.size());
     }
-
-
-    public AuxPoW getAuxPoW() {
-        return this.auxpow;
-    }
-
-    public void setAuxPoW(AuxPoW auxpow) {
-        this.auxpow = auxpow;
-    }
-
 
     @Override
-    public Coin getBlockInflation(int height) {
-        final AltcoinNetworkParameters altParams = (AltcoinNetworkParameters) params;
-        return altParams.getBlockSubsidy(height);
+    public void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+        uint32ToByteStreamLE(transactionCount, stream);
+
+        stream.write(new VarInt(hashes.size()).encode());
+        for (Sha256Hash hash : hashes)
+            stream.write(hash.getReversedBytes());
+
+        stream.write(new VarInt(matchedChildBits.length).encode());
+        stream.write(matchedChildBits);
     }
 
-    /**
-     * Get the chain ID (upper 16 bits) from an AuxPoW version number.
-     */
-    public static long getChainID(final long rawVersion) {
-        return rawVersion >> 16;
+    @Override
+    protected void parse() throws ProtocolException {
+        transactionCount = (int)readUint32();
+
+        int nHashes = (int) readVarInt();
+        hashes = new ArrayList<Sha256Hash>(Math.min(nHashes, Utils.MAX_INITIAL_ARRAY_LENGTH));
+        for (int i = 0; i < nHashes; i++)
+            hashes.add(readHash());
+
+        int nFlagBytes = (int) readVarInt();
+        matchedChildBits = readBytes(nFlagBytes);
+
+        length = cursor - offset;
     }
 
-    /**
-     * Return chain ID from block version of an AuxPoW-enabled chain.
-     */
-    public long getChainID() {
-        return getChainID(this.getRawVersion());
-    }
-
-    /**
-     * Return flags from block version of an AuxPoW-enabled chain.
-     * 
-     * @return flags as a bitset. 
-     */
-    public BitSet getVersionFlags() {
-        final BitSet bitset = new BitSet(BYTE_BITS);
-        final int bits = (int) (this.getRawVersion() & 0xff00) >> 8;
-
-        for (int bit = 0; bit < BYTE_BITS; bit++) {
-            if ((bits & (1 << bit)) > 0) {
-                bitset.set(bit);
+    // Based on CPartialMerkleTree::TraverseAndBuild in Bitcoin Core.
+    private static void traverseAndBuild(int height, int pos, List<Sha256Hash> allLeafHashes, byte[] includeBits,
+                                         List<Boolean> matchedChildBits, List<Sha256Hash> resultHashes) {
+        boolean parentOfMatch = false;
+        // Is this node a parent of at least one matched hash?
+        for (int p = pos << height; p < (pos+1) << height && p < allLeafHashes.size(); p++) {
+            if (Utils.checkBitLE(includeBits, p)) {
+                parentOfMatch = true;
+                break;
             }
         }
-
-        return bitset;
-    }
-
-    /**
-     * Return block version without applying any filtering (i.e. for AuxPoW blocks
-     * which structure version differently to pack in additional data).
-     */
-    public final long getRawVersion() {
-        return super.getVersion();
-    }
-
-    /**
-     * Get the base version (i.e. Bitcoin-like version number) out of a packed
-     * AuxPoW version number (i.e. one that contains chain ID and feature flags).
-     */
-    public static long getBaseVersion(final long rawVersion) {
-        return rawVersion & 0xff;
-    }
-
-    @Override
-    public long getVersion() {
-        // TODO: Can we cache the individual parts on parse?
-        if (this.params instanceof AltcoinNetworkParameters) {
-            // AuxPoW networks use the higher block version bits for flags and
-            // chain ID.
-            return getBaseVersion(super.getVersion());
+        // Store as a flag bit.
+        matchedChildBits.add(parentOfMatch);
+        if (height == 0 || !parentOfMatch) {
+            // If at height 0, or nothing interesting below, store hash and stop.
+            resultHashes.add(calcHash(height, pos, allLeafHashes));
         } else {
-            return super.getVersion();
+            // Otherwise descend into the subtrees.
+            int h = height - 1;
+            int p = pos * 2;
+            traverseAndBuild(h, p, allLeafHashes, includeBits, matchedChildBits, resultHashes);
+            if (p + 1 < getTreeWidth(allLeafHashes.size(), h))
+                traverseAndBuild(h, p + 1, allLeafHashes, includeBits, matchedChildBits, resultHashes);
         }
     }
 
-    protected void parseAuxPoW() throws ProtocolException {
-        if (this.auxpowParsed)
-            return;
-
-        this.auxpow = null;
-        if (this.auxpowChain) {
-            final AuxPoWNetworkParameters auxpowParams = (AuxPoWNetworkParameters)this.params;
-            if (auxpowParams.isAuxPoWBlockVersion(this.getRawVersion())
-                && payload.length >= 160) { // We have at least 2 headers in an Aux block. Workaround for StoredBlocks
-                this.auxpow = new AuxPoW(params, payload, cursor, this, serializer);
-            }
+    private static Sha256Hash calcHash(int height, int pos, List<Sha256Hash> hashes) {
+        if (height == 0) {
+            // Hash at height 0 is just the regular tx hash itself.
+            return hashes.get(pos);
         }
-
-        this.auxpowParsed = true;
-        this.auxpowBytesValid = serializer.isParseRetainMode();
-    }
-
-    @Override
-    protected void parseTransactions(final int offset) {
-        this.auxpowChain = params instanceof AuxPoWNetworkParameters;
-        parseAuxPoW();
-        if (null != this.auxpow) {
-            super.parseTransactions(offset + auxpow.getMessageSize());
-            optimalEncodingMessageSize += auxpow.getMessageSize();
+        int h = height - 1;
+        int p = pos * 2;
+        Sha256Hash left = calcHash(h, p, hashes);
+        // Calculate right hash if not beyond the end of the array - copy left hash otherwise.
+        Sha256Hash right;
+        if (p + 1 < getTreeWidth(hashes.size(), h)) {
+            right = calcHash(h, p + 1, hashes);
         } else {
-            super.parseTransactions(offset);
+            right = left;
         }
+        return combineLeftRight(left.getBytes(), right.getBytes());
     }
 
-    @Override
-    void writeHeader(OutputStream stream) throws IOException {
-        super.writeHeader(stream);
-        if (null != this.auxpow) {
-            this.auxpow.bitcoinSerialize(stream);
+    // helper function to efficiently calculate the number of nodes at given height in the merkle tree
+    private static int getTreeWidth(int transactionCount, int height) {
+        return (transactionCount + (1 << height) - 1) >> height;
+    }
+
+    private static class ValuesUsed {
+        public int bitsUsed = 0, hashesUsed = 0;
+    }
+
+    // recursive function that traverses tree nodes, consuming the bits and hashes produced by TraverseAndBuild.
+    // it returns the hash of the respective node.
+    private Sha256Hash recursiveExtractHashes(int height, int pos, ValuesUsed used, List<Sha256Hash> matchedHashes) throws VerificationException {
+        if (used.bitsUsed >= matchedChildBits.length*8) {
+            // overflowed the bits array - failure
+            throw new VerificationException("PartialMerkleTree overflowed its bits array");
         }
-    }
-
-    /** Returns a copy of the block, but without any transactions. */
-    @Override
-    public Block cloneAsHeader() {
-        AltcoinBlock block = new AltcoinBlock(params, getRawVersion());
-        super.copyBitcoinHeaderTo(block);
-        block.auxpow = auxpow;
-        return block;
-    }
-
-    /** Returns true if the hash of the block is OK (lower than difficulty target). */
-    protected boolean checkProofOfWork(boolean throwException) throws VerificationException {
-        if (params instanceof AltcoinNetworkParameters) {
-            BigInteger target = getDifficultyTargetAsInteger();
-
-            if (params instanceof AuxPoWNetworkParameters) {
-                final AuxPoWNetworkParameters auxParams = (AuxPoWNetworkParameters)this.params;
-                if (auxParams.isAuxPoWBlockVersion(getRawVersion()) && null != auxpow) {
-                    return auxpow.checkProofOfWork(this.getHash(), target, throwException);
-                }
+        boolean parentOfMatch = checkBitLE(matchedChildBits, used.bitsUsed++);
+        if (height == 0 || !parentOfMatch) {
+            // if at height 0, or nothing interesting below, use stored hash and do not descend
+            if (used.hashesUsed >= hashes.size()) {
+                // overflowed the hash array - failure
+                throw new VerificationException("PartialMerkleTree overflowed its hash array");
             }
-
-            final AltcoinNetworkParameters altParams = (AltcoinNetworkParameters)this.params;
-            BigInteger h = altParams.getBlockDifficultyHash(this).toBigInteger();
-            if (h.compareTo(target) > 0) {
-                // Proof of work check failed!
-                if (throwException)
-                    throw new VerificationException("Hash is higher than target: " + getHashAsString() + " vs "
-                            + target.toString(16));
-                else
-                    return false;
-            }
-            return true;
+            Sha256Hash hash = hashes.get(used.hashesUsed++);
+            if (height == 0 && parentOfMatch) // in case of height 0, we have a matched txid
+                matchedHashes.add(hash);
+            return hash;
         } else {
-            return super.checkProofOfWork(throwException);
+            // otherwise, descend into the subtrees to extract matched txids and hashes
+            byte[] left = recursiveExtractHashes(height - 1, pos * 2, used, matchedHashes).getBytes(), right;
+            if (pos * 2 + 1 < getTreeWidth(transactionCount, height-1)) {
+                right = recursiveExtractHashes(height - 1, pos * 2 + 1, used, matchedHashes).getBytes();
+                if (Arrays.equals(right, left))
+                    throw new VerificationException("Invalid merkle tree with duplicated left/right branches");
+            } else {
+                right = left;
+            }
+            // and combine them before returning
+            return combineLeftRight(left, right);
         }
+    }
+
+    private static Sha256Hash combineLeftRight(byte[] left, byte[] right) {
+        return Sha256Hash.wrapReversed(Sha256Hash.hashTwice(reverseBytes(left), reverseBytes(right)));
     }
 
     /**
-     * Checks the block data to ensure it follows the rules laid out in the network parameters. Specifically,
-     * throws an exception if the proof of work is invalid, or if the timestamp is too far from what it should be.
-     * This is <b>not</b> everything that is required for a block to be valid, only what is checkable independent
-     * of the chain and without a transaction index.
+     * Extracts tx hashes that are in this merkle tree
+     * and returns the merkle root of this tree.
      *
-     * @throws VerificationException
+     * The returned root should be checked against the
+     * merkle root contained in the block header for security.
+     *
+     * @param matchedHashesOut A list which will contain the matched txn (will be cleared).
+     * @return the merkle root of this merkle tree
+     * @throws ProtocolException if this partial merkle tree is invalid
      */
+    public Sha256Hash getTxnHashAndMerkleRoot(List<Sha256Hash> matchedHashesOut) throws VerificationException {
+        matchedHashesOut.clear();
+
+        // An empty set will not work
+        if (transactionCount == 0)
+            throw new VerificationException("Got a CPartialMerkleTree with 0 transactions");
+        // check for excessively high numbers of transactions
+        if (transactionCount > Block.MAX_BLOCK_SIZE / 60) // 60 is the lower bound for the size of a serialized CTransaction
+            throw new VerificationException("Got a CPartialMerkleTree with more transactions than is possible");
+        // there can never be more hashes provided than one for every txid
+        if (hashes.size() > transactionCount)
+            throw new VerificationException("Got a CPartialMerkleTree with more hashes than transactions");
+        // there must be at least one bit per node in the partial tree, and at least one node per hash
+        if (matchedChildBits.length*8 < hashes.size())
+            throw new VerificationException("Got a CPartialMerkleTree with fewer matched bits than hashes");
+        // calculate height of tree
+        int height = 0;
+        while (getTreeWidth(transactionCount, height) > 1)
+            height++;
+        // traverse the partial tree
+        ValuesUsed used = new ValuesUsed();
+        Sha256Hash merkleRoot = recursiveExtractHashes(height, 0, used, matchedHashesOut);
+        // verify that all bits were consumed (except for the padding caused by serializing it as a byte sequence)
+        if ((used.bitsUsed+7)/8 != matchedChildBits.length ||
+                // verify that all hashes were consumed
+                used.hashesUsed != hashes.size())
+            throw new VerificationException("Got a CPartialMerkleTree that didn't need all the data it provided");
+
+        return merkleRoot;
+    }
+
+    public int getTransactionCount() {
+        return transactionCount;
+    }
+
     @Override
-    public void verifyHeader() throws VerificationException {
-        super.verifyHeader();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SuperblockPartialMerkleTree other = (SuperblockPartialMerkleTree) o;
+        return transactionCount == other.transactionCount && hashes.equals(other.hashes)
+                && Arrays.equals(matchedChildBits, other.matchedChildBits);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(transactionCount, hashes, Arrays.hashCode(matchedChildBits));
+    }
+
+    @Override
+    public String toString() {
+        return "SuperblockPartialMerkleTree{" +
+                "transactionCount=" + transactionCount +
+                ", matchedChildBits=" + Arrays.toString(matchedChildBits) +
+                ", hashes=" + hashes +
+                '}';
+    }
+    /**
+     * Returns the position of a tx within a block
+     */
+    public int getTransactionIndex(Sha256Hash txHash) {
+        if (!hashes.contains(txHash)) {
+            throw new VerificationException("Supplied tx hash is not in this tree: " + txHash);
+        }
+        // calculate height of tree
+        int height = 0;
+        while (getTreeWidth(transactionCount, height) > 1)
+            height++;
+        // traverse the partial tree
+        ValuesUsed used = new ValuesUsed();
+        GetTransactionIndexResult result = new GetTransactionIndexResult();
+        recursiveGetTransactionIndex(height, 0, used, txHash, result);
+        if (!result.found) {
+            throw new VerificationException("Could not find tx");
+        }
+        return result.counter;
+    }
+
+    private void recursiveGetTransactionIndex(int height, int pos, ValuesUsed used, Sha256Hash txHash, GetTransactionIndexResult result) throws VerificationException {
+        if (result.found) return;
+        if (used.bitsUsed >= matchedChildBits.length*8) {
+            // overflowed the bits array - failure
+            throw new VerificationException("PartialMerkleTree overflowed its bits array");
+        }
+        boolean parentOfMatch = checkBitLE(matchedChildBits, used.bitsUsed++);
+        if (height == 0 || !parentOfMatch) {
+            // if at height 0, or nothing interesting below, use stored hash and do not descend
+            if (used.hashesUsed >= hashes.size()) {
+                // overflowed the hash array - failure
+                throw new VerificationException("PartialMerkleTree overflowed its hash array");
+            }
+            Sha256Hash hash = hashes.get(used.hashesUsed++);
+            if (hash.equals(txHash))
+                // We found the tx we were looking for
+                if (parentOfMatch)
+                    // no need to increase counter
+                    result.found = true;
+                else
+                    // We found the tx hash but it is included in the tree just to be able to calculate the proof of another tx.
+                    throw new VerificationException("Could not find tx");
+            else if (height == 0)
+                // in case of height 0, we have a txid (matched or not)
+                // This is another tx that is before the tx we are looking for
+                result.counter++;
+            else
+                // !parentOfMatch is true
+                // We found an incomplete branch, calculate how many leaves the full tree has bellow this node.
+                result.counter += BigInteger.valueOf(2).pow(height).intValue();
+        } else {
+            // otherwise, descend into the subtrees to extract matched txids and hashes
+            recursiveGetTransactionIndex(height - 1, pos * 2, used, txHash, result);
+            if (pos * 2 + 1 < getTreeWidth(transactionCount, height-1)) {
+                // right tree has real content
+                recursiveGetTransactionIndex(height - 1, pos * 2 + 1, used, txHash, result);
+            }
+        }
+    }
+
+    private static class GetTransactionIndexResult {
+        public int counter = 0;
+        public boolean found = false;
+    }
+
+
+    /**
+     * Get the path of sibling nodes from the supplied tx to the root (tree root not included)
+     */
+    public List<Sha256Hash> getTransactionPath(Sha256Hash txHash) {
+        if (!hashes.contains(txHash)) {
+            throw new VerificationException("Supplied tx hash is not in this tree: " + txHash);
+        }
+        // calculate height of tree
+        int height = 0;
+        while (getTreeWidth(transactionCount, height) > 1)
+            height++;
+        ValuesUsed used = new ValuesUsed();
+        List<Sha256Hash> matchedHashes = new ArrayList<Sha256Hash>();
+        GetTransactionPathResult result = recursiveGetTransactionPath(height, 0, used, txHash, matchedHashes);
+        if (!result.found) {
+            throw new VerificationException("Could not find tx");
+        }
+        return matchedHashes;
+
+    }
+
+    /*
+     * Traverse the tree recursively and add hashes to matchedHashes as we find hashes that are part of the path.
+     * GetTransactionPathResult.found is true when the node being evaluated is txHash or txHash is bellow this node. False otherwise.
+     * GetTransactionPathResult.hash is the hash of the node being evaluated.
+     */
+    private GetTransactionPathResult recursiveGetTransactionPath(int height, int pos, ValuesUsed used, Sha256Hash txHash, List<Sha256Hash> matchedHashes) throws VerificationException {
+        GetTransactionPathResult result = new GetTransactionPathResult();
+        if (used.bitsUsed >= matchedChildBits.length*8) {
+            // overflowed the bits array - failure
+            throw new VerificationException("PartialMerkleTree overflowed its bits array");
+        }
+        boolean parentOfMatch = checkBitLE(matchedChildBits, used.bitsUsed++);
+        if (height == 0 || !parentOfMatch) {
+            // if at height 0, or nothing interesting below, use stored hash and do not descend
+            if (used.hashesUsed >= hashes.size()) {
+                // overflowed the hash array - failure
+                throw new VerificationException("PartialMerkleTree overflowed its hash array");
+            }
+            Sha256Hash hash = hashes.get(used.hashesUsed++);
+            if (hash.equals(txHash)) {
+                // We found txHash
+                if (parentOfMatch) {
+                    result.found = true;
+                    result.hash = hash;
+                    return result;
+                } else {
+                    // We found the tx hash but it is included in the tree just to be able to calculate the proof of another tx.
+                    throw new VerificationException("Could not find tx");
+                }
+            } else if (height == 0) {
+                // This is a tx, but is not txHash
+                result.hash = hash;
+                return result;
+            } else {
+                // !parentOfMatch is true
+                // We found an incomplete branch
+                result.hash = hash;
+                return result;
+            }
+        } else {
+            // otherwise, descend into the subtrees to extract matched txids and hashes
+            GetTransactionPathResult left = recursiveGetTransactionPath(height - 1, pos * 2, used, txHash, matchedHashes);
+            GetTransactionPathResult right;
+            if (pos * 2 + 1 < getTreeWidth(transactionCount, height-1)) {
+                // right tree has real content
+                right = recursiveGetTransactionPath(height - 1, pos * 2 + 1, used, txHash, matchedHashes);
+            } else {
+                right = new GetTransactionPathResult();
+                // don't copy left.found
+                right.hash = left.hash;
+            }
+            Sha256Hash thisNode = combineLeftRight(left.hash.getBytes(), right.hash.getBytes());
+            result.hash = thisNode;
+            if (left.found || right.found) {
+                // txHash is bellow this node, add to matchedHashes the "opposite" hash.
+                result.found = true;
+                if (left.found) {
+                    matchedHashes.add(right.hash);
+                } else {
+                    matchedHashes.add(left.hash);
+                }
+                return result;
+            } else {
+                // txHash is not bellow this node, nothing to add to matchedHashes.
+                return result;
+            }
+        }
+    }
+
+    private static class GetTransactionPathResult {
+        public Sha256Hash hash;
+        public boolean found = false;
     }
 }

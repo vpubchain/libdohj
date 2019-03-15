@@ -18,10 +18,8 @@
 package org.libdohj.params;
 
 import org.bitcoinj.core.Utils;
-import org.spongycastle.util.encoders.Hex;
 
 import static com.google.common.base.Preconditions.checkState;
-
 /**
  * Parameters for the Dogecoin testnet, a separate public network that has
  * relaxed rules suitable for development and testing of applications and new
@@ -31,28 +29,29 @@ public class DogecoinTestNet3Params extends AbstractDogecoinParams {
     public static final int TESTNET_MAJORITY_WINDOW = 1000;
     public static final int TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED = 750;
     public static final int TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 501;
-    protected static final int DIFFICULTY_CHANGE_TARGET = 145000;
 
     public DogecoinTestNet3Params() {
-        super(DIFFICULTY_CHANGE_TARGET);
+        super();
         id = ID_DOGE_TESTNET;
 
-        packetMagic = 0xfcc1b7dc;
-
-        maxTarget = Utils.decodeCompactBits(0x1e0fffffL);
-        port = 44556;
-        addressHeader = 113;
+        packetMagic = 0x0b110907;
+        interval = INTERVAL;
+        targetTimespan = TARGET_TIMESPAN;
+        maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
+        port = 18333;
+        addressHeader = 111;
         p2shHeader = 196;
-        acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
-        dumpedPrivateKeyHeader = 241;
-        genesisBlock.setTime(1391503289L);
-        genesisBlock.setDifficultyTarget(0x1e0ffff0L);
-        genesisBlock.setNonce(997879);
-        spendableCoinbaseDepth = 30;
-        subsidyDecreaseBlockCount = 100000;
+        dumpedPrivateKeyHeader = 239;
+        segwitAddressHrp = "tsys";
+        genesisBlock.setTime(1296688602L);
+        genesisBlock.setDifficultyTarget(0x1d00ffffL);
+        genesisBlock.setNonce(414098458);
+        spendableCoinbaseDepth = 100;
+        subsidyDecreaseBlockCount = 210000;
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("bb0a78264637406b6360aad926284d544d7049f45189db5664f3c4d07350559e"));
-        alertSigningKey = Hex.decode("042756726da3c7ef515d89212ee1705023d14be389e25fe15611585661b9a20021908b2b80a3c7200a0139dd2b26946606aab0eef9aa7689a6dc2c7eee237fa834");
+        checkState(genesisHash.equals("000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"));
+        alertSigningKey = Utils.HEX.decode("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
+
 
         majorityEnforceBlockUpgrade = TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
         majorityRejectBlockOutdated = TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED;
@@ -61,10 +60,12 @@ public class DogecoinTestNet3Params extends AbstractDogecoinParams {
         dnsSeeds = new String[] {
             "testseed.jrn.me.uk"
         };
-        // Note this is the same as the BIP32 testnet, as BIP44 makes HD wallets
-        // chain agnostic. Dogecoin mainnet has its own headers for legacy reasons.
-        bip32HeaderPub = 0x043587CF;
-        bip32HeaderPriv = 0x04358394;
+
+
+        bip32HeaderP2PKHpub = 0x0488b21e; // The 4 byte header that serializes in base58 to "xpub".
+        bip32HeaderP2PKHpriv = 0x0488ade4; // The 4 byte header that serializes in base58 to "xprv"
+        bip32HeaderP2WPKHpub = 0x04b24746; // The 4 byte header that serializes in base58 to "zpub".
+        bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
     }
 
     private static DogecoinTestNet3Params instance;

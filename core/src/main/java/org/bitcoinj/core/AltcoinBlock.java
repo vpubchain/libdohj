@@ -18,22 +18,15 @@
 package org.bitcoinj.core;
 
 import org.libdohj.core.AltcoinNetworkParameters;
-import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.security.GeneralSecurityException;
 import java.util.BitSet;
 import java.util.List;
-import static org.bitcoinj.core.Coin.FIFTY_COINS;
 
-import org.libdohj.core.ScryptHash;
-import static org.libdohj.core.Utils.scryptDigest;
 
-import static org.bitcoinj.core.Utils.reverseBytes;
 import org.libdohj.core.AuxPoWNetworkParameters;
 
 /**
@@ -61,7 +54,6 @@ public class AltcoinBlock extends org.bitcoinj.core.Block {
      */
     private boolean auxpowChain = false;
 
-    private ScryptHash scryptHash;
 
     /** Special case constructor, used for the genesis node, cloneAsHeader and unit tests.
      * @param params NetworkParameters object.
@@ -113,17 +105,6 @@ public class AltcoinBlock extends org.bitcoinj.core.Block {
         super(params, version, prevBlockHash, merkleRoot, time, difficultyTarget, nonce, transactions);
     }
 
-    private ScryptHash calculateScryptHash() {
-        try {
-            ByteArrayOutputStream bos = new UnsafeByteArrayOutputStream(HEADER_SIZE);
-            writeHeader(bos);
-            return new ScryptHash(reverseBytes(scryptDigest(bos.toByteArray())));
-        } catch (IOException e) {
-            throw new RuntimeException(e); // Cannot happen.
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e); // Cannot happen.
-        }
-    }
 
     public AuxPoW getAuxPoW() {
         return this.auxpow;
@@ -133,22 +114,6 @@ public class AltcoinBlock extends org.bitcoinj.core.Block {
         this.auxpow = auxpow;
     }
 
-    /**
-     * Returns the Scrypt hash of the block (which for a valid, solved block should be
-     * below the target). Big endian.
-     */
-    public ScryptHash getScryptHash() {
-        if (scryptHash == null)
-            scryptHash = calculateScryptHash();
-        return scryptHash;
-    }
-
-    /**
-     * Returns the Scrypt hash of the block.
-     */
-    public String getScryptHashAsString() {
-        return getScryptHash().toString();
-    }
 
     @Override
     public Coin getBlockInflation(int height) {

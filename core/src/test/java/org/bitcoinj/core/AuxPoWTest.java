@@ -3,11 +3,12 @@ package org.bitcoinj.core;
 import java.util.Arrays;
 import java.util.Collections;
 
+import com.google.common.io.ByteStreams;
 import org.libdohj.core.AltcoinSerializer;
 import org.libdohj.params.DogecoinMainNetParams;
 import org.libdohj.params.DogecoinTestNet3Params;
 
-import static org.bitcoinj.core.Util.getBytes;
+
 import static org.junit.Assert.*;
 
 import org.junit.Before;
@@ -32,12 +33,12 @@ public class AuxPoWTest {
      */
     @Test
     public void parseAuxPoWHeader() throws Exception {
-        byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
         MerkleBranch branch = auxpow.getCoinbaseBranch();
         Sha256Hash expected = Sha256Hash.wrap("089b911f5e471c0e1800f3384281ebec5b372fbb6f358790a92747ade271ccdf");
 
-        assertEquals(expected, auxpow.getCoinbase().getHash());
+        assertEquals(expected, auxpow.getCoinbase().getTxId());
         assertEquals(3, auxpow.getCoinbaseBranch().size());
         assertEquals(6, auxpow.getChainMerkleBranch().size());
 
@@ -52,7 +53,7 @@ public class AuxPoWTest {
      */
     @Test
     public void serializeAuxPoWHeader() throws Exception {
-        byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
         byte[] expected = auxpowAsBytes;
         byte[] actual = auxpow.bitcoinSerialize();
@@ -60,16 +61,6 @@ public class AuxPoWTest {
         assertArrayEquals(expected, actual);
     }
 
-    /**
-     * Validate the AuxPoW header from Dogecoin block #403,931.
-     */
-    @Test
-    public void checkAuxPoWHeader() throws Exception {
-        byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
-        AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
-        auxpow.checkProofOfWork(Sha256Hash.wrap("0c836b86991631d34a8a68054e2f62db919b39d1ee43c27ab3344d6aa82fa609"),
-            Utils.decodeCompactBits(0x1b06f8f0), true);
-    }
 
     /**
      * Validate the AuxPoW header with no explicit data header in the coinbase
@@ -85,7 +76,7 @@ public class AuxPoWTest {
                 return block.getHash();
             }
         };
-        byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header_no_tx_header.bin"));
+        byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header_no_tx_header.bin"));
         AuxPoW auxpow = new AuxPoW(namecoinLikeParams, auxpowAsBytes, (ChildMessage) null, namecoinLikeParams.getDefaultSerializer());
         auxpow.checkProofOfWork(Sha256Hash.wrap("5fb89c3b18c27bc38d351d516177cbd3504c95ca0494cbbbbd52f2fb5f2ff1ec"),
             Utils.decodeCompactBits(0x1b00b269), true);
@@ -99,7 +90,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectNonGenerateAuxPoW() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
         auxpow.getCoinbaseBranch().setIndex(0x01);
         expectedEx.expect(org.bitcoinj.core.VerificationException.class);
@@ -114,7 +105,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectOwnChainID() throws Exception {
-        byte[] payload = Util.getBytes(getClass().getResourceAsStream("dogecoin_block371337.bin"));
+        byte[] payload = ByteStreams.toByteArray(getClass().getResourceAsStream("dogecoin_block371337.bin"));
         AltcoinSerializer serializer = (AltcoinSerializer)params.getDefaultSerializer();
         final AltcoinBlock block = (AltcoinBlock)serializer.makeBlock(payload);
         assertEquals(98, block.getChainID());
@@ -132,7 +123,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectVeryLongMerkleBranch() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
         auxpow.getChainMerkleBranch().setHashes(Arrays.asList(new Sha256Hash[32]));
         expectedEx.expect(org.bitcoinj.core.VerificationException.class);
@@ -150,7 +141,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfCoinbaseTransactionNotInMerkleBranch() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
         auxpow.getCoinbase().clearOutputs();
         expectedEx.expect(org.bitcoinj.core.VerificationException.class);
@@ -165,7 +156,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfCoinbaseTransactionHasNoInputs() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -186,7 +177,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfMergedMineHeaderMissing() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -210,7 +201,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfMergedMineHeaderDuplicated() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -237,7 +228,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfCoinbaseMissingChainMerkleRoot() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -259,7 +250,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfChainMerkleRootNotAfterHeader() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -289,7 +280,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfScriptBytesTooShort() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -311,7 +302,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfCoinbaseMerkleBranchSizeMismatch() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -332,7 +323,7 @@ public class AuxPoWTest {
      */
     @Test
     public void shouldRejectIfNonceIncorrect() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
+        final byte[] auxpowAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_header.bin"));
         final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
         // This will also break the difficulty check, but as that doesn't occur
@@ -347,21 +338,7 @@ public class AuxPoWTest {
             Utils.decodeCompactBits(0x1b06f8f0), true);
     }
 
-    /**
-     * Having validated the AuxPoW header, the last check is that the block hash
-     * meets the target difficulty.
-     */
-    @Test
-    public void shouldRejectHashAboveTarget() throws Exception {
-        final byte[] auxpowAsBytes = getBytes(getClass().getResourceAsStream("auxpow_header.bin"));
-        final AuxPoW auxpow = new AuxPoW(params, auxpowAsBytes, (ChildMessage) null, params.getDefaultSerializer());
 
-        expectedEx.expect(org.bitcoinj.core.VerificationException.class);
-        expectedEx.expectMessage("Hash is higher than target: 000000000003178bb23160cdbc81af53f47cae9f479acf1e69849da42fd5bfca vs 0");
-        
-        auxpow.checkProofOfWork(Sha256Hash.wrap("0c836b86991631d34a8a68054e2f62db919b39d1ee43c27ab3344d6aa82fa609"),
-            Utils.decodeCompactBits(0x00), true);
-    }
 
     /**
      * Fix up the merkle root of the parent block header to match the
@@ -370,7 +347,7 @@ public class AuxPoWTest {
     private void updateMerkleRootToMatchCoinbase(final AuxPoW auxpow) {
         final Transaction coinbase = auxpow.getCoinbase();
 
-        final Sha256Hash revisedCoinbaseHash = coinbase.getHash();
+        final Sha256Hash revisedCoinbaseHash = coinbase.getTxId();
         // The coinbase hash is the single leaf node in the merkle tree,
         // so to get the root we need to hash it with itself.
         // Note that bytes are reversed for hashing

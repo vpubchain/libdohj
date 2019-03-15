@@ -2,10 +2,11 @@ package org.bitcoinj.core;
 
 
 import static org.bitcoinj.core.AuxPoWTest.params;
+
+import com.google.common.io.ByteStreams;
 import org.bitcoinj.params.TestNet3Params;
 import org.junit.Test;
 
-import static org.bitcoinj.core.Util.getBytes;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -21,7 +22,7 @@ public class MerkleBranchTest {
      */
     @Test
     public void parseMerkleBranch() throws Exception {
-        byte[] branchAsBytes = getBytes(getClass().getResourceAsStream("auxpow_merkle_branch.bin"));
+        byte[] branchAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_merkle_branch.bin"));
         MerkleBranch branch = new MerkleBranch(params, (ChildMessage) null, branchAsBytes, 0);
         Sha256Hash[] expected = new Sha256Hash[] {
             Sha256Hash.wrap("be079078869399faccaa764c10e9df6e9981701759ad18e13724d9ca58831348"),
@@ -38,7 +39,7 @@ public class MerkleBranchTest {
      */
     @Test
     public void serializeMerkleBranch() throws Exception {
-        byte[] expected = getBytes(getClass().getResourceAsStream("auxpow_merkle_branch.bin"));
+        byte[] expected = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_merkle_branch.bin"));
         MerkleBranch branch = new MerkleBranch(params, (ChildMessage) null, expected, 0,
             params.getDefaultSerializer());
         byte[] actual = branch.bitcoinSerialize();
@@ -51,7 +52,7 @@ public class MerkleBranchTest {
      */
     @Test
     public void calculateRootBranch() throws Exception {
-        byte[] branchAsBytes = getBytes(getClass().getResourceAsStream("auxpow_merkle_branch2.bin"));
+        byte[] branchAsBytes = ByteStreams.toByteArray(getClass().getResourceAsStream("auxpow_merkle_branch2.bin"));
         MerkleBranch branch = new MerkleBranch(params, (ChildMessage) null, branchAsBytes, 0);
         Sha256Hash txId = Sha256Hash.wrap("0c836b86991631d34a8a68054e2f62db919b39d1ee43c27ab3344d6aa82fa609");
         Sha256Hash expected = Sha256Hash.wrap("ce3040fdb7e37484f6a1ca4f8f5da81e6b7e404ec91102315a233e03a0c39c95");
