@@ -51,7 +51,7 @@
                 <configuration>
                     <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
                     <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
-                    <outputDirectory>core/target/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+                    <!--<outputDirectory>core/target/mvn-repo</outputDirectory> &lt;!&ndash; matches distribution management repository url above &ndash;&gt;-->
                     <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
                     <includes><include>**/*</include></includes>
                     <repositoryName>libdohj</repositoryName>      <!-- github repo name -->

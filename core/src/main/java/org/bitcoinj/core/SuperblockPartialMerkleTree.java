@@ -215,7 +215,7 @@ public class SuperblockPartialMerkleTree extends Message {
         }
     }
 
-    private static Sha256Hash combineLeftRight(byte[] left, byte[] right) {
+    public static Sha256Hash combineLeftRight(byte[] left, byte[] right) {
         return Sha256Hash.wrapReversed(Sha256Hash.hashTwice(reverseBytes(left), reverseBytes(right)));
     }
 
