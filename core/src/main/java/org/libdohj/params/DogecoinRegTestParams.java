@@ -56,12 +56,12 @@ public class DogecoinRegTestParams extends DogecoinTestNet3Params {
         synchronized (DogecoinRegTestParams.class) {
             if (genesis == null) {
                 genesis = super.getGenesisBlock();
-                genesis.setNonce(0);
+                genesis.setNonce(5);
                 genesis.setDifficultyTarget(0x207fffffL);
                 genesis.setTime(1549295742L);
                 segwitAddressHrp = "sysrt";
                 checkState(genesis.getVersion() == 1);
-                checkState(genesis.getHashAsString().toLowerCase().equals("992634ae5086a018fe4a677a1583a31dbbb07387fc7d7802d9334392823f6555"));
+                checkState(genesis.getHashAsString().toLowerCase().equals("18ca6835aea9c1fd25d1aa097790da47a343d1bdd3370fa2585dd5cd6883de5e"));
                 genesis.verifyHeader();
             }
             return genesis;
