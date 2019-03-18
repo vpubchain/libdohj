@@ -77,6 +77,7 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
     public static final String ID_DOGE_MAINNET = "org.dogecoin.production";
     /** The string returned by getId() for the testnet. */
     public static final String ID_DOGE_TESTNET = "org.dogecoin.test";
+    public static final String ID_DOGE_REGTEST = "org.dogecoin.regtest";
 
 
     protected Logger log = LoggerFactory.getLogger(AbstractDogecoinParams.class);
