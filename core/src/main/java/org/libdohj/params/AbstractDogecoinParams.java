@@ -51,7 +51,7 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
     /** Standard format for the Koinu denomination. */
     public static final MonetaryFormat KOINU;
 
-    public static final int AUXPOW_CHAIN_ID = 0x0062; // 98
+    public static final int AUXPOW_CHAIN_ID = 0x1000;
 
 
     /** Currency code for base 1 Dogecoin. */
@@ -61,8 +61,6 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
     /** Currency code for base 1/100,000,000 Dogecoin. */
     public static final String CODE_KOINU = "Koinu";
 
-    private static final int BLOCK_MIN_VERSION_AUXPOW = 0x00620002;
-    private static final int BLOCK_VERSION_FLAG_AUXPOW = 0x00000100;
 
     static {
         DOGE = MonetaryFormat.BTC.noCode()
@@ -81,8 +79,8 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
 
 
     protected Logger log = LoggerFactory.getLogger(AbstractDogecoinParams.class);
-    public static final int DOGECOIN_PROTOCOL_VERSION_AUXPOW = 70003;
-    public static final int DOGECOIN_PROTOCOL_VERSION_CURRENT = 70004;
+    public static final int DOGECOIN_PROTOCOL_VERSION_MIN = 70404;
+    public static final int DOGECOIN_PROTOCOL_VERSION_CURRENT = 70404;
 
     private static final Coin BASE_SUBSIDY   = COIN.multiply(500000);
     private static final Coin STABLE_SUBSIDY = COIN.multiply(10000);
@@ -238,14 +236,14 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
                 return DOGECOIN_PROTOCOL_VERSION_CURRENT;
             case MINIMUM:
             default:
-                return DOGECOIN_PROTOCOL_VERSION_AUXPOW;
+                return DOGECOIN_PROTOCOL_VERSION_MIN;
         }
     }
 
     @Override
     public boolean isAuxPoWBlockVersion(long version) {
-        return version >= BLOCK_MIN_VERSION_AUXPOW
-            && (version & BLOCK_VERSION_FLAG_AUXPOW) > 0;
+        // every block other than genesis should have auxpow information
+        return version != 1;
     }
 
 
