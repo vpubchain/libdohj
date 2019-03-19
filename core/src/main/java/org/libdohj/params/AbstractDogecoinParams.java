@@ -224,6 +224,10 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
         return new AltcoinSerializer(this, parseRetain);
     }
 
+    @Override
+    public int getProtocolVersionNum(final ProtocolVersion version) {
+        return version.getBitcoinProtocolVersion();
+    }
 
     @Override
     public boolean isAuxPoWBlockVersion(long version) {
