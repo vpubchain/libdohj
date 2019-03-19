@@ -109,7 +109,7 @@ public class AuxPoWTest {
         byte[] payload = ByteStreams.toByteArray(getClass().getResourceAsStream("dogecoin_block371337.bin"));
         AltcoinSerializer serializer = (AltcoinSerializer)params.getDefaultSerializer();
         final AltcoinBlock block = (AltcoinBlock)serializer.makeBlock(payload);
-        assertEquals(AUXPOW_CHAIN_ID, block.getChainID());
+       
         final AuxPoW auxpow = block.getAuxPoW();
         assertNotNull(auxpow);
         auxpow.setParentBlockHeader((AltcoinBlock)block.cloneAsHeader());
