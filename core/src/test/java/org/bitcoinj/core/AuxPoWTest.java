@@ -10,6 +10,7 @@ import org.libdohj.params.DogecoinTestNet3Params;
 
 
 import static org.junit.Assert.*;
+import static org.libdohj.params.AbstractDogecoinParams.AUXPOW_CHAIN_ID;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -108,7 +109,7 @@ public class AuxPoWTest {
         byte[] payload = ByteStreams.toByteArray(getClass().getResourceAsStream("dogecoin_block371337.bin"));
         AltcoinSerializer serializer = (AltcoinSerializer)params.getDefaultSerializer();
         final AltcoinBlock block = (AltcoinBlock)serializer.makeBlock(payload);
-        assertEquals(98, block.getChainID());
+        assertEquals(AUXPOW_CHAIN_ID, block.getChainID());
         final AuxPoW auxpow = block.getAuxPoW();
         assertNotNull(auxpow);
         auxpow.setParentBlockHeader((AltcoinBlock)block.cloneAsHeader());
