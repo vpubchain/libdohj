@@ -79,8 +79,6 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
 
 
     protected Logger log = LoggerFactory.getLogger(AbstractDogecoinParams.class);
-    public static final int DOGECOIN_PROTOCOL_VERSION_MIN = 70404;
-    public static final int DOGECOIN_PROTOCOL_VERSION_CURRENT = 70404;
 
     private static final Coin BASE_SUBSIDY   = COIN.multiply(500000);
     private static final Coin STABLE_SUBSIDY = COIN.multiply(10000);
@@ -226,19 +224,6 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
         return new AltcoinSerializer(this, parseRetain);
     }
 
-    @Override
-    public int getProtocolVersionNum(final ProtocolVersion version) {
-        switch (version) {
-            case PONG:
-            case BLOOM_FILTER:
-                return version.getBitcoinProtocolVersion();
-            case CURRENT:
-                return DOGECOIN_PROTOCOL_VERSION_CURRENT;
-            case MINIMUM:
-            default:
-                return DOGECOIN_PROTOCOL_VERSION_MIN;
-        }
-    }
 
     @Override
     public boolean isAuxPoWBlockVersion(long version) {
