@@ -104,12 +104,12 @@ public class AuxPoWTest {
      * Check that block headers from the child chain are rejected as parent
      * chain for AuxPoW, via checking of the chain IDs.
      */
-    @Test
+   /* TODO: JS reimplement with sys header @Test
     public void shouldRejectOwnChainID() throws Exception {
         byte[] payload = ByteStreams.toByteArray(getClass().getResourceAsStream("dogecoin_block371337.bin"));
         AltcoinSerializer serializer = (AltcoinSerializer)params.getDefaultSerializer();
         final AltcoinBlock block = (AltcoinBlock)serializer.makeBlock(payload);
-       
+        assertEquals(AUXPOW_CHAIN_ID, block.getChainID());
         final AuxPoW auxpow = block.getAuxPoW();
         assertNotNull(auxpow);
         auxpow.setParentBlockHeader((AltcoinBlock)block.cloneAsHeader());
@@ -117,7 +117,7 @@ public class AuxPoWTest {
         expectedEx.expectMessage("Aux POW parent has our chain ID");
         auxpow.checkProofOfWork(Sha256Hash.wrap("0c836b86991631d34a8a68054e2f62db919b39d1ee43c27ab3344d6aa82fa609"),
             Utils.decodeCompactBits(0x1b06f8f0), true);
-    }
+    }*/
 
     /**
      * Check that where the merkle branch is far too long to use, it's rejected.
