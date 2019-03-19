@@ -77,6 +77,9 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
     public static final String ID_DOGE_TESTNET = "org.dogecoin.test";
     public static final String ID_DOGE_REGTEST = "org.dogecoin.regtest";
 
+    public static final int DOGE_TARGET_TIMESPAN = 6 * 60 * 60; // 6h retarget
+    public static final int DOGE_TARGET_SPACING = 1 * 60;  // 1 minute per block.
+    public static final int DOGE_INTERVAL = DOGE_TARGET_TIMESPAN / DOGE_TARGET_SPACING;
 
     protected Logger log = LoggerFactory.getLogger(AbstractDogecoinParams.class);
 
@@ -85,6 +88,8 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
 
     public AbstractDogecoinParams() {
         super();
+        interval = DOGE_INTERVAL;
+        targetTimespan = DOGE_TARGET_TIMESPAN;
     }
 
     @Override
