@@ -35,8 +35,6 @@ public class DogecoinTestNet3Params extends AbstractDogecoinParams {
         id = ID_DOGE_TESTNET;
 
         packetMagic = 0x0b110907;
-        interval = INTERVAL;
-        targetTimespan = TARGET_TIMESPAN;
         maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
         port = 18333;
         addressHeader = 111;

@@ -32,8 +32,6 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
 
     public DogecoinMainNetParams() {
         super();
-        interval = INTERVAL;
-        targetTimespan = TARGET_TIMESPAN;
         maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
 
 
