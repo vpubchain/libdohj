@@ -34,30 +34,29 @@ public class DogecoinTestNet3Params extends AbstractDogecoinParams {
         super();
         id = ID_DOGE_TESTNET;
 
-        packetMagic = 0x0b110907;
-        maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
-        port = 18333;
-        addressHeader = 111;
+        packetMagic = 0xcee2caff;
+        maxTarget = Utils.decodeCompactBits(0x1e0ffff0);
+        port = 18369;
+        addressHeader = 65;
         p2shHeader = 196;
         dumpedPrivateKeyHeader = 239;
         segwitAddressHrp = "tsys";
-        genesisBlock.setTime(1296688602L);
-        genesisBlock.setDifficultyTarget(0x1d00ffffL);
-        genesisBlock.setNonce(414098458);
+        genesisBlock.setTime(1553041506L);
+        genesisBlock.setDifficultyTarget(0x1e0ffff0);
+        genesisBlock.setNonce(1018586);
         spendableCoinbaseDepth = 100;
         subsidyDecreaseBlockCount = 210000;
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"));
-        alertSigningKey = Utils.HEX.decode("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
+        checkState(genesisHash.equals("000007f96fcbdbdfbc2560b63bb545648f8d9f27c15ae8f5bbc350218198704e"));
 
 
         majorityEnforceBlockUpgrade = TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
         majorityRejectBlockOutdated = TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED;
         majorityWindow = TESTNET_MAJORITY_WINDOW;
 
-        dnsSeeds = new String[] {
+       /* dnsSeeds = new String[] {
             "testseed.jrn.me.uk"
-        };
+        };*/
 
 
         bip32HeaderP2PKHpub = 0x0488b21e; // The 4 byte header that serializes in base58 to "xpub".

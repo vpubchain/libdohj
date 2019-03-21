@@ -35,12 +35,12 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
 
 
-        dumpedPrivateKeyHeader = 158; //This is always addressHeader + 128
-        addressHeader = 30;
-        p2shHeader = 22;
+        dumpedPrivateKeyHeader = 128; //This is always addressHeader + 128
+        addressHeader = 63;
+        p2shHeader = 5;
 
-        port = 22556;
-        packetMagic = 0xc0c0c0c0;
+        port = 8369;
+        packetMagic = 0xcee2caff;
 
 
         segwitAddressHrp = "sys";
@@ -50,15 +50,15 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
 
         genesisBlock.setDifficultyTarget(0x1e0ffff0L);
-        genesisBlock.setTime(1386325540L);
-        genesisBlock.setNonce(99943L);
+        genesisBlock.setTime(1553040331L);
+        genesisBlock.setNonce(4847196L);
         id = ID_DOGE_MAINNET;
         subsidyDecreaseBlockCount = 100000;
         spendableCoinbaseDepth = 100;
 
         String genesisHash = genesisBlock.getHashAsString();
-       /* checkState(genesisHash.equals("1a91e3dace36e2be3bf030a65679fe821aa1d6ef92e7c9902eb318182c355691"),
-                genesisHash);*/
+        checkState(genesisHash.equals("00000978a70b30e06014aaee001965bb0a9a03e38ca99ff6d79e34df7805f7be"),
+                genesisHash);
 
         majorityEnforceBlockUpgrade = MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
         majorityRejectBlockOutdated = MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED;
@@ -68,8 +68,8 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         // transactions are handled. Duplicated transactions could occur in the case where a coinbase had the same
         // extraNonce and the same outputs but appeared at different heights, and greatly complicated re-org handling.
         // Having these here simplifies block connection logic considerably.
-        checkpoints.put(    0, Sha256Hash.wrap("1a91e3dace36e2be3bf030a65679fe821aa1d6ef92e7c9902eb318182c355691"));
-        checkpoints.put( 42279, Sha256Hash.wrap("8444c3ef39a46222e87584ef956ad2c9ef401578bd8b51e8e4b9a86ec3134d3a"));
+        checkpoints.put(    0, Sha256Hash.wrap("00000978a70b30e06014aaee001965bb0a9a03e38ca99ff6d79e34df7805f7be"));
+       /* checkpoints.put( 42279, Sha256Hash.wrap("8444c3ef39a46222e87584ef956ad2c9ef401578bd8b51e8e4b9a86ec3134d3a"));
         checkpoints.put( 42400, Sha256Hash.wrap("557bb7c17ed9e6d4a6f9361cfddf7c1fc0bdc394af7019167442b41f507252b4"));
         checkpoints.put(104679, Sha256Hash.wrap("35eb87ae90d44b98898fec8c39577b76cb1eb08e1261cfc10706c8ce9a1d01cf"));
         checkpoints.put(128370, Sha256Hash.wrap("3f9265c94cab7dc3bd6a2ad2fb26c8845cb41cff437e0a75ae006997b4974be6"));
@@ -86,14 +86,14 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         checkpoints.put(350000, Sha256Hash.wrap("2bdcba23a47049e69c4fec4c425462e30f3d21d25223bde0ed36be4ea59a7075"));
         checkpoints.put(370005, Sha256Hash.wrap("7be5af2c5bdcb79047dcd691ef613b82d4f1c20835677daed936de37a4782e15"));
         checkpoints.put(371337, Sha256Hash.wrap("60323982f9c5ff1b5a954eac9dc1269352835f47c2c5222691d80f0d50dcf053"));
-        checkpoints.put(400002, Sha256Hash.wrap("a5021d69a83f39aef10f3f24f932068d6ff322c654d20562def3fac5703ce3aa"));
+        checkpoints.put(400002, Sha256Hash.wrap("a5021d69a83f39aef10f3f24f932068d6ff322c654d20562def3fac5703ce3aa"));*/
 
-        dnsSeeds = new String[] {
+        /*dnsSeeds = new String[] {
                 "seed.dogecoin.com",
                 "seed.multidoge.org",
                 "seed2.multidoge.org",
                 "seed.doger.dogecoin.com"
-        };
+        };*/
     }
 
     private static DogecoinMainNetParams instance;
