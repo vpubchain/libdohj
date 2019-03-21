@@ -32,7 +32,7 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
 
     public DogecoinMainNetParams() {
         super();
-        maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
+        maxTarget = Utils.decodeCompactBits(0x1e0ffff0L);
 
 
         dumpedPrivateKeyHeader = 128; //This is always addressHeader + 128
