@@ -50,14 +50,14 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
 
         genesisBlock.setDifficultyTarget(0x1e0ffff0L);
-        genesisBlock.setTime(1553040331L);
-        genesisBlock.setNonce(4847196L);
+        genesisBlock.setTime(1552606660L);
+        genesisBlock.setNonce(1104721L);
         id = ID_DOGE_MAINNET;
         subsidyDecreaseBlockCount = 100000;
         spendableCoinbaseDepth = 100;
 
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("00000978a70b30e06014aaee001965bb0a9a03e38ca99ff6d79e34df7805f7be"),
+        checkState(genesisHash.equals("000009e388d0cb406b36ed70bf89d21a4f7a3b1adea23a21e7948bac2dbb9fcc"),
                 genesisHash);
 
         majorityEnforceBlockUpgrade = MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
@@ -68,8 +68,8 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         // transactions are handled. Duplicated transactions could occur in the case where a coinbase had the same
         // extraNonce and the same outputs but appeared at different heights, and greatly complicated re-org handling.
         // Having these here simplifies block connection logic considerably.
-        /*checkpoints.put(    0, Sha256Hash.wrap("00000978a70b30e06014aaee001965bb0a9a03e38ca99ff6d79e34df7805f7be"));
-        checkpoints.put( 42279, Sha256Hash.wrap("8444c3ef39a46222e87584ef956ad2c9ef401578bd8b51e8e4b9a86ec3134d3a"));
+        checkpoints.put(    0, Sha256Hash.wrap("000009e388d0cb406b36ed70bf89d21a4f7a3b1adea23a21e7948bac2dbb9fcc"));
+        /*checkpoints.put( 42279, Sha256Hash.wrap("8444c3ef39a46222e87584ef956ad2c9ef401578bd8b51e8e4b9a86ec3134d3a"));
         checkpoints.put( 42400, Sha256Hash.wrap("557bb7c17ed9e6d4a6f9361cfddf7c1fc0bdc394af7019167442b41f507252b4"));
         checkpoints.put(104679, Sha256Hash.wrap("35eb87ae90d44b98898fec8c39577b76cb1eb08e1261cfc10706c8ce9a1d01cf"));
         checkpoints.put(128370, Sha256Hash.wrap("3f9265c94cab7dc3bd6a2ad2fb26c8845cb41cff437e0a75ae006997b4974be6"));
