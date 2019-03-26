@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.Coin;
-import com.dogecoin.dogecoinj.core.NetworkParameters;
-import com.dogecoin.dogecoinj.core.Sha256Hash;
-import com.dogecoin.dogecoinj.core.VerificationException;
-import com.dogecoin.dogecoinj.core.WalletExtension;
-import com.dogecoin.dogecoinj.kits.WalletAppKit;
-import com.dogecoin.dogecoinj.params.RegTestParams;
-import com.dogecoin.dogecoinj.protocols.channels.*;
-import com.dogecoin.dogecoinj.utils.BriefLogFormatter;
+import com.syscoin.syscoinj.core.Coin;
+import com.syscoin.syscoinj.core.NetworkParameters;
+import com.syscoin.syscoinj.core.Sha256Hash;
+import com.syscoin.syscoinj.core.VerificationException;
+import com.syscoin.syscoinj.core.WalletExtension;
+import com.syscoin.syscoinj.kits.WalletAppKit;
+import com.syscoin.syscoinj.params.RegTestParams;
+import com.syscoin.syscoinj.protocols.channels.*;
+import com.syscoin.syscoinj.utils.BriefLogFormatter;
 import com.google.common.collect.ImmutableList;
 
 import com.google.common.util.concurrent.ListenableFuture;

@@ -22,15 +22,15 @@ import org.bitcoinj.core.Utils;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
- * Parameters for the main Dogecoin production network on which people trade
+ * Parameters for the main Syscoin production network on which people trade
  * goods and services.
  */
-public class DogecoinMainNetParams extends AbstractDogecoinParams {
+public class SyscoinMainNetParams extends AbstractSyscoinParams {
     public static final int MAINNET_MAJORITY_WINDOW = 2000;
     public static final int MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED = 1900;
     public static final int MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 1500;
 
-    public DogecoinMainNetParams() {
+    public SyscoinMainNetParams() {
         super();
         maxTarget = Utils.decodeCompactBits(0x1e0ffff0L);
 
@@ -52,7 +52,7 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         genesisBlock.setDifficultyTarget(0x1e0ffff0L);
         genesisBlock.setTime(1552606660L);
         genesisBlock.setNonce(1104721L);
-        id = ID_DOGE_MAINNET;
+        id = ID_SYSCOIN_MAINNET;
         subsidyDecreaseBlockCount = 100000;
         spendableCoinbaseDepth = 100;
 
@@ -89,17 +89,17 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
         checkpoints.put(400002, Sha256Hash.wrap("a5021d69a83f39aef10f3f24f932068d6ff322c654d20562def3fac5703ce3aa"));*/
 
         /*dnsSeeds = new String[] {
-                "seed.dogecoin.com",
-                "seed.multidoge.org",
-                "seed2.multidoge.org",
-                "seed.doger.dogecoin.com"
+                "seed.syscoin.com",
+                "seed.multisyscoin.org",
+                "seed2.multisyscoin.org",
+                "seed.syscoinr.syscoin.com"
         };*/
     }
 
-    private static DogecoinMainNetParams instance;
-    public static synchronized DogecoinMainNetParams get() {
+    private static SyscoinMainNetParams instance;
+    public static synchronized SyscoinMainNetParams get() {
         if (instance == null) {
-            instance = new DogecoinMainNetParams();
+            instance = new SyscoinMainNetParams();
         }
         return instance;
     }
@@ -112,7 +112,7 @@ public class DogecoinMainNetParams extends AbstractDogecoinParams {
     @Override
     public String getPaymentProtocolId() {
         // TODO: CHANGE THIS
-        return ID_DOGE_MAINNET;
+        return ID_SYSCOIN_MAINNET;
     }
 
     @Override

@@ -21,18 +21,18 @@ import org.bitcoinj.core.Utils;
 
 import static com.google.common.base.Preconditions.checkState;
 /**
- * Parameters for the Dogecoin testnet, a separate public network that has
+ * Parameters for the Syscoin testnet, a separate public network that has
  * relaxed rules suitable for development and testing of applications and new
- * Dogecoin versions.
+ * Syscoin versions.
  */
-public class DogecoinTestNet3Params extends AbstractDogecoinParams {
+public class SyscoinTestNet3Params extends AbstractSyscoinParams {
     public static final int TESTNET_MAJORITY_WINDOW = 1000;
     public static final int TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED = 750;
     public static final int TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 501;
 
-    public DogecoinTestNet3Params() {
+    public SyscoinTestNet3Params() {
         super();
-        id = ID_DOGE_TESTNET;
+        id = ID_SYSCOIN_TESTNET;
 
         packetMagic = 0xcee2caff;
         maxTarget = Utils.decodeCompactBits(0x1e0ffff0);
@@ -65,10 +65,10 @@ public class DogecoinTestNet3Params extends AbstractDogecoinParams {
         bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
     }
 
-    private static DogecoinTestNet3Params instance;
-    public static synchronized DogecoinTestNet3Params get() {
+    private static SyscoinTestNet3Params instance;
+    public static synchronized SyscoinTestNet3Params get() {
         if (instance == null) {
-            instance = new DogecoinTestNet3Params();
+            instance = new SyscoinTestNet3Params();
         }
         return instance;
     }

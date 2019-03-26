@@ -1,10 +1,10 @@
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.*;
-import com.dogecoin.dogecoinj.net.discovery.DnsDiscovery;
-import com.dogecoin.dogecoinj.params.TestNet3Params;
-import com.dogecoin.dogecoinj.store.SPVBlockStore;
-import com.dogecoin.dogecoinj.wallet.DeterministicSeed;
+import com.syscoin.syscoinj.core.*;
+import com.syscoin.syscoinj.net.discovery.DnsDiscovery;
+import com.syscoin.syscoinj.params.TestNet3Params;
+import com.syscoin.syscoinj.store.SPVBlockStore;
+import com.syscoin.syscoinj.wallet.DeterministicSeed;
 
 import java.io.File;
 
@@ -31,7 +31,7 @@ public class RestoreFromSeed {
         Wallet wallet = Wallet.fromSeed(params, seed);
 
         // Because we are importing an existing wallet which might already have transactions we must re-download the blockchain to make the wallet picks up these transactions
-        // You can find some information about this in the guides: https://dogecoinj.github.io/working-with-the-wallet#setup
+        // You can find some information about this in the guides: https://syscoinj.github.io/working-with-the-wallet#setup
         // To do this we clear the transactions of the wallet and delete a possible existing blockchain file before we download the blockchain again further down.
         System.out.println(wallet.toString());
         wallet.clearTransactions(0);

@@ -1,4 +1,4 @@
-# configuration for https://travis-ci.org/dogecoin/libdohj
+# configuration for https://travis-ci.org/syscoin/libdohj
 sudo: false
 language: java
 jdk: oraclejdk8

@@ -1,14 +1,14 @@
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.*;
-import com.dogecoin.dogecoinj.kits.WalletAppKit;
-import com.dogecoin.dogecoinj.params.RegTestParams;
-import com.dogecoin.dogecoinj.utils.BriefLogFormatter;
-import com.dogecoin.dogecoinj.utils.Threading;
+import com.syscoin.syscoinj.core.*;
+import com.syscoin.syscoinj.kits.WalletAppKit;
+import com.syscoin.syscoinj.params.RegTestParams;
+import com.syscoin.syscoinj.utils.BriefLogFormatter;
+import com.syscoin.syscoinj.utils.Threading;
 
 import java.io.File;
 
-import static com.dogecoin.dogecoinj.core.Coin.*;
+import static com.syscoin.syscoinj.core.Coin.*;
 
 /**
  * This is a little test app that waits for a coin on a local regtest node, then  generates two transactions that double

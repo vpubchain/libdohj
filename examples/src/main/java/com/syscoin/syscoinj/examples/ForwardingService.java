@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.*;
-import com.dogecoin.dogecoinj.crypto.KeyCrypterException;
-import com.dogecoin.dogecoinj.kits.WalletAppKit;
-import com.dogecoin.dogecoinj.params.MainNetParams;
-import com.dogecoin.dogecoinj.params.RegTestParams;
-import com.dogecoin.dogecoinj.params.TestNet3Params;
-import com.dogecoin.dogecoinj.utils.BriefLogFormatter;
+import com.syscoin.syscoinj.core.*;
+import com.syscoin.syscoinj.crypto.KeyCrypterException;
+import com.syscoin.syscoinj.kits.WalletAppKit;
+import com.syscoin.syscoinj.params.MainNetParams;
+import com.syscoin.syscoinj.params.RegTestParams;
+import com.syscoin.syscoinj.params.TestNet3Params;
+import com.syscoin.syscoinj.utils.BriefLogFormatter;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -81,7 +81,7 @@ public class ForwardingService {
         kit.wallet().addEventListener(new AbstractWalletEventListener() {
             @Override
             public void onCoinsReceived(Wallet w, Transaction tx, Coin prevBalance, Coin newBalance) {
-                // Runs in the dedicated "user thread" (see dogecoinj docs for more info on this).
+                // Runs in the dedicated "user thread" (see syscoinj docs for more info on this).
                 //
                 // The transaction "tx" can either be pending, or included into a block (we didn't see the broadcast).
                 Coin value = tx.getValueSentToMe(w);

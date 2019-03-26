@@ -19,21 +19,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.dogecoin</groupId>
-        <artifactId>dogecoinj-parent</artifactId>
-        <version>0.13-SNAPSHOT</version>
+        <groupId>com.syscoin</groupId>
+        <artifactId>syscoinj-parent</artifactId>
+        <version>0.15.1-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dogecoinj-examples</artifactId>
+    <artifactId>syscoinj-examples</artifactId>
 
-    <name>dogecoinj Examples</name>
-    <description>A collection of examples using the dogecoinj library</description>
+    <name>syscoinj Examples</name>
+    <description>A collection of examples using the syscoinj library</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.dogecoin</groupId>
-            <artifactId>dogecoinj-core</artifactId>
+            <groupId>com.syscoin</groupId>
+            <artifactId>syscoinj-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

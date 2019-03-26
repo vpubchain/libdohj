@@ -29,10 +29,10 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Network parameters for the regression test mode of bitcoind in which all blocks are trivially solvable.
  */
-public class DogecoinRegTestParams extends DogecoinTestNet3Params {
+public class SyscoinRegTestParams extends SyscoinTestNet3Params {
     private static final BigInteger MAX_TARGET = new BigInteger("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16);
 
-    public DogecoinRegTestParams() {
+    public SyscoinRegTestParams() {
         super();
         // Difficulty adjustments are disabled for regtest.
         // By setting the block interval for difficulty adjustments to Integer.MAX_VALUE we make sure difficulty never changes.
@@ -40,7 +40,7 @@ public class DogecoinRegTestParams extends DogecoinTestNet3Params {
         maxTarget = MAX_TARGET;
         subsidyDecreaseBlockCount = 150;
         port = 18444;
-        id = ID_DOGE_REGTEST;
+        id = ID_SYSCOIN_REGTEST;
         packetMagic = 0xfabfb5da;
     }
 
@@ -53,7 +53,7 @@ public class DogecoinRegTestParams extends DogecoinTestNet3Params {
 
     @Override
     public Block getGenesisBlock() {
-        synchronized (DogecoinRegTestParams.class) {
+        synchronized (SyscoinRegTestParams.class) {
             if (genesis == null) {
                 genesis = super.getGenesisBlock();
                 genesis.setNonce(3);
@@ -68,18 +68,18 @@ public class DogecoinRegTestParams extends DogecoinTestNet3Params {
         }
     }
 
-    private static DogecoinRegTestParams instance;
+    private static SyscoinRegTestParams instance;
 
-    public static synchronized DogecoinRegTestParams get() {
+    public static synchronized SyscoinRegTestParams get() {
         if (instance == null) {
-            instance = new DogecoinRegTestParams();
+            instance = new SyscoinRegTestParams();
         }
         return instance;
     }
 
     @Override
     public String getPaymentProtocolId() {
-        return ID_DOGE_REGTEST;
+        return ID_SYSCOIN_REGTEST;
     }
 
     @Override

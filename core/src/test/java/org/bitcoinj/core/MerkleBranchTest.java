@@ -18,7 +18,7 @@ public class MerkleBranchTest {
     static final NetworkParameters params = TestNet3Params.get();
 
     /**
-     * Parse the coinbase merkle branch from Dogecoin block #403,931.
+     * Parse the coinbase merkle branch from Syscoin block #403,931.
      */
     @Test
     public void parseMerkleBranch() throws Exception {
@@ -34,7 +34,7 @@ public class MerkleBranchTest {
     }
 
     /**
-     * Parse the transaction merkle branch from Dogecoin block #403,931, then
+     * Parse the transaction merkle branch from Syscoin block #403,931, then
      * serialize it back again to verify serialization works.
      */
     @Test
@@ -48,7 +48,7 @@ public class MerkleBranchTest {
     }
 
     /**
-     * Calculate the AuxPoW merkle branch root from Dogecoin block #403,931.
+     * Calculate the AuxPoW merkle branch root from Syscoin block #403,931.
      */
     @Test
     public void calculateRootBranch() throws Exception {

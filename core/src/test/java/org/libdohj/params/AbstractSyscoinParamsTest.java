@@ -25,8 +25,8 @@ import org.junit.Before;
  *
  * @author Ross Nicoll
  */
-public class AbstractDogecoinParamsTest {
-    private static final AbstractDogecoinParams params = DogecoinMainNetParams.get();
+public class AbstractSyscoinParamsTest {
+    private static final AbstractSyscoinParams params = SyscoinMainNetParams.get();
 
     @Before
     public void setUp() throws Exception {

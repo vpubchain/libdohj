@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.*;
-import com.dogecoin.dogecoinj.kits.WalletAppKit;
-import com.dogecoin.dogecoinj.params.RegTestParams;
-import com.dogecoin.dogecoinj.protocols.channels.PaymentChannelClientConnection;
-import com.dogecoin.dogecoinj.protocols.channels.StoredPaymentChannelClientStates;
-import com.dogecoin.dogecoinj.protocols.channels.ValueOutOfRangeException;
-import com.dogecoin.dogecoinj.utils.BriefLogFormatter;
-import com.dogecoin.dogecoinj.utils.Threading;
+import com.syscoin.syscoinj.core.*;
+import com.syscoin.syscoinj.kits.WalletAppKit;
+import com.syscoin.syscoinj.params.RegTestParams;
+import com.syscoin.syscoinj.protocols.channels.PaymentChannelClientConnection;
+import com.syscoin.syscoinj.protocols.channels.StoredPaymentChannelClientStates;
+import com.syscoin.syscoinj.protocols.channels.ValueOutOfRangeException;
+import com.syscoin.syscoinj.utils.BriefLogFormatter;
+import com.syscoin.syscoinj.utils.Threading;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 
-import static com.dogecoin.dogecoinj.core.Coin.CENT;
+import static com.syscoin.syscoinj.core.Coin.CENT;
 
 /**
  * Simple client that connects to the given host, opens a channel, and pays one cent.

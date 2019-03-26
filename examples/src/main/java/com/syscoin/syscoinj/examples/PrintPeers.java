@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.AbstractPeerEventListener;
-import com.dogecoin.dogecoinj.core.NetworkParameters;
-import com.dogecoin.dogecoinj.core.Peer;
-import com.dogecoin.dogecoinj.core.PeerAddress;
-import com.dogecoin.dogecoinj.core.VersionMessage;
-import com.dogecoin.dogecoinj.net.discovery.DnsDiscovery;
-import com.dogecoin.dogecoinj.net.discovery.PeerDiscoveryException;
-import com.dogecoin.dogecoinj.net.NioClientManager;
-import com.dogecoin.dogecoinj.params.MainNetParams;
-import com.dogecoin.dogecoinj.utils.BriefLogFormatter;
+import com.syscoin.syscoinj.core.AbstractPeerEventListener;
+import com.syscoin.syscoinj.core.NetworkParameters;
+import com.syscoin.syscoinj.core.Peer;
+import com.syscoin.syscoinj.core.PeerAddress;
+import com.syscoin.syscoinj.core.VersionMessage;
+import com.syscoin.syscoinj.net.discovery.DnsDiscovery;
+import com.syscoin.syscoinj.net.discovery.PeerDiscoveryException;
+import com.syscoin.syscoinj.net.NioClientManager;
+import com.syscoin.syscoinj.params.MainNetParams;
+import com.syscoin.syscoinj.utils.BriefLogFormatter;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;

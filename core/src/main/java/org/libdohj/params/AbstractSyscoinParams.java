@@ -41,55 +41,55 @@ import org.libdohj.core.AltcoinSerializer;
 import org.libdohj.core.AuxPoWNetworkParameters;
 
 /**
- * Common parameters for Dogecoin networks.
+ * Common parameters for Syscoin networks.
  */
-public abstract class AbstractDogecoinParams extends NetworkParameters implements AuxPoWNetworkParameters {
-    /** Standard format for the DOGE denomination. */
-    public static final MonetaryFormat DOGE;
-    /** Standard format for the mDOGE denomination. */
-    public static final MonetaryFormat MDOGE;
+public abstract class AbstractSyscoinParams extends NetworkParameters implements AuxPoWNetworkParameters {
+    /** Standard format for the SYSCOIN denomination. */
+    public static final MonetaryFormat SYSCOIN;
+    /** Standard format for the mSYSCOIN denomination. */
+    public static final MonetaryFormat MSYSCOIN;
     /** Standard format for the Koinu denomination. */
     public static final MonetaryFormat KOINU;
 
     public static final int AUXPOW_CHAIN_ID = 0x1000;
 
 
-    /** Currency code for base 1 Dogecoin. */
-    public static final String CODE_DOGE = "DOGE";
-    /** Currency code for base 1/1,000 Dogecoin. */
-    public static final String CODE_MDOGE = "mDOGE";
-    /** Currency code for base 1/100,000,000 Dogecoin. */
+    /** Currency code for base 1 Syscoin. */
+    public static final String CODE_SYSCOIN = "SYSCOIN";
+    /** Currency code for base 1/1,000 Syscoin. */
+    public static final String CODE_MSYSCOIN = "mSYSCOIN";
+    /** Currency code for base 1/100,000,000 Syscoin. */
     public static final String CODE_KOINU = "Koinu";
 
 
     static {
-        DOGE = MonetaryFormat.BTC.noCode()
-            .code(0, CODE_DOGE)
-            .code(3, CODE_MDOGE)
+        SYSCOIN = MonetaryFormat.BTC.noCode()
+            .code(0, CODE_SYSCOIN)
+            .code(3, CODE_MSYSCOIN)
             .code(7, CODE_KOINU);
-        MDOGE = DOGE.shift(3).minDecimals(2).optionalDecimals(2);
-        KOINU = DOGE.shift(7).minDecimals(0).optionalDecimals(2);
+        MSYSCOIN = SYSCOIN.shift(3).minDecimals(2).optionalDecimals(2);
+        KOINU = SYSCOIN.shift(7).minDecimals(0).optionalDecimals(2);
     }
 
     /** The string returned by getId() for the main, production network where people trade things. */
-    public static final String ID_DOGE_MAINNET = "org.dogecoin.production";
+    public static final String ID_SYSCOIN_MAINNET = "org.syscoin.production";
     /** The string returned by getId() for the testnet. */
-    public static final String ID_DOGE_TESTNET = "org.dogecoin.test";
-    public static final String ID_DOGE_REGTEST = "org.dogecoin.regtest";
+    public static final String ID_SYSCOIN_TESTNET = "org.syscoin.test";
+    public static final String ID_SYSCOIN_REGTEST = "org.syscoin.regtest";
 
-    public static final int DOGE_TARGET_TIMESPAN = 6 * 60 * 60; // 6h retarget
-    public static final int DOGE_TARGET_SPACING = 1 * 60;  // 1 minute per block.
-    public static final int DOGE_INTERVAL = DOGE_TARGET_TIMESPAN / DOGE_TARGET_SPACING;
+    public static final int SYSCOIN_TARGET_TIMESPAN = 6 * 60 * 60; // 6h retarget
+    public static final int SYSCOIN_TARGET_SPACING = 1 * 60;  // 1 minute per block.
+    public static final int SYSCOIN_INTERVAL = SYSCOIN_TARGET_TIMESPAN / SYSCOIN_TARGET_SPACING;
 
-    protected Logger log = LoggerFactory.getLogger(AbstractDogecoinParams.class);
+    protected Logger log = LoggerFactory.getLogger(AbstractSyscoinParams.class);
 
     private static final Coin BASE_SUBSIDY   = COIN.multiply(500000);
     private static final Coin STABLE_SUBSIDY = COIN.multiply(10000);
 
-    public AbstractDogecoinParams() {
+    public AbstractSyscoinParams() {
         super();
-        interval = DOGE_INTERVAL;
-        targetTimespan = DOGE_TARGET_TIMESPAN;
+        interval = SYSCOIN_INTERVAL;
+        targetTimespan = SYSCOIN_TARGET_TIMESPAN;
     }
 
     @Override
@@ -177,12 +177,12 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
 
 
     public MonetaryFormat getMonetaryFormat() {
-        return DOGE;
+        return SYSCOIN;
     }
 
     @Override
     public Coin getMaxMoney() {
-        // TODO: Change to be Doge compatible
+        // TODO: Change to be Syscoin compatible
         return MAX_MONEY;
     }
 
@@ -193,7 +193,7 @@ public abstract class AbstractDogecoinParams extends NetworkParameters implement
 
     @Override
     public String getUriScheme() {
-        return "dogecoin";
+        return "syscoin";
     }
 
     @Override

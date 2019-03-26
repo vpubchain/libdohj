@@ -5,12 +5,12 @@ import java.util.Collections;
 
 import com.google.common.io.ByteStreams;
 import org.libdohj.core.AltcoinSerializer;
-import org.libdohj.params.DogecoinMainNetParams;
-import org.libdohj.params.DogecoinTestNet3Params;
+import org.libdohj.params.SyscoinMainNetParams;
+import org.libdohj.params.SyscoinTestNet3Params;
 
 
 import static org.junit.Assert.*;
-import static org.libdohj.params.AbstractDogecoinParams.AUXPOW_CHAIN_ID;
+import static org.libdohj.params.AbstractSyscoinParams.AUXPOW_CHAIN_ID;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,7 +21,7 @@ import org.junit.rules.ExpectedException;
  * AuxPoW header parsing/serialization and validation
  */
 public class AuxPoWTest {
-    static final NetworkParameters params = DogecoinMainNetParams.get();
+    static final NetworkParameters params = SyscoinMainNetParams.get();
     private static final int MERKLE_ROOT_COINBASE_INDEX = 0;
 
     @Before
@@ -30,7 +30,7 @@ public class AuxPoWTest {
     }
 
     /**
-     * Parse the AuxPoW header from Dogecoin block #403,931.
+     * Parse the AuxPoW header from Syscoin block #403,931.
      */
     @Test
     public void parseAuxPoWHeader() throws Exception {
@@ -50,7 +50,7 @@ public class AuxPoWTest {
     }
 
     /**
-     * Test serializing the AuxPoW header from Dogecoin block #403,931.
+     * Test serializing the AuxPoW header from Syscoin block #403,931.
      */
     @Test
     public void serializeAuxPoWHeader() throws Exception {
@@ -70,7 +70,7 @@ public class AuxPoWTest {
     @Test
     public void checkAuxPoWHeaderNoTxHeader() throws Exception {
         // Emulate Namecoin block hashing for this test
-        final NetworkParameters namecoinLikeParams = new DogecoinTestNet3Params() {
+        final NetworkParameters namecoinLikeParams = new SyscoinTestNet3Params() {
             @Override
             public Sha256Hash getBlockDifficultyHash(Block block) {
                 // Namecoin uses SHA256 hashes
@@ -106,7 +106,7 @@ public class AuxPoWTest {
      */
    /* TODO: JS reimplement with sys header @Test
     public void shouldRejectOwnChainID() throws Exception {
-        byte[] payload = ByteStreams.toByteArray(getClass().getResourceAsStream("dogecoin_block371337.bin"));
+        byte[] payload = ByteStreams.toByteArray(getClass().getResourceAsStream("syscoin_block371337.bin"));
         AltcoinSerializer serializer = (AltcoinSerializer)params.getDefaultSerializer();
         final AltcoinBlock block = (AltcoinBlock)serializer.makeBlock(payload);
         assertEquals(AUXPOW_CHAIN_ID, block.getChainID());

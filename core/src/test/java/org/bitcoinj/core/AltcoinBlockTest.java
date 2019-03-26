@@ -22,14 +22,14 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.libdohj.params.DogecoinMainNetParams;
+import org.libdohj.params.SyscoinMainNetParams;
 
 /**
  *
  * @author jrn
  */
 public class AltcoinBlockTest {
-    private final NetworkParameters params = DogecoinMainNetParams.get();
+    private final NetworkParameters params = SyscoinMainNetParams.get();
 
     @Before
     public void setUp() throws Exception {

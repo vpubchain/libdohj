@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dogecoin/libdohj.svg?branch=master)](https://travis-ci.org/dogecoin/libdohj)
+[![Build Status](https://travis-ci.org/syscoin/libdohj.svg?branch=master)](https://travis-ci.org/syscoin/libdohj)
 
 ### Welcome to libdohj
 
@@ -11,7 +11,7 @@ be welcomed). We ported over bitcoinj to the latest version 0.15+ and try to kee
 To get started, it is best to have the latest JDK and Maven installed. The HEAD of the `master` branch contains the latest development code.
 You should be familiar with bitcoinj first, as this library simply adds minor
 changes to extend bitcoinj. Generally using libdohj is equivalent to using
-bitcoinj, except with different network parameters (reflecting Dogecoin consensus
+bitcoinj, except with different network parameters (reflecting Syscoin consensus
 in place of Bitcoin).
 
 Be aware however that altcoin blocks have their own class, AltcoinBlock, which

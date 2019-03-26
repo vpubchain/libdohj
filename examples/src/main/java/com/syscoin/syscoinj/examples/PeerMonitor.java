@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.AbstractPeerEventListener;
-import com.dogecoin.dogecoinj.core.NetworkParameters;
-import com.dogecoin.dogecoinj.core.Peer;
-import com.dogecoin.dogecoinj.core.PeerGroup;
-import com.dogecoin.dogecoinj.net.discovery.DnsDiscovery;
-import com.dogecoin.dogecoinj.params.MainNetParams;
-import com.dogecoin.dogecoinj.utils.BriefLogFormatter;
+import com.syscoin.syscoinj.core.AbstractPeerEventListener;
+import com.syscoin.syscoinj.core.NetworkParameters;
+import com.syscoin.syscoinj.core.Peer;
+import com.syscoin.syscoinj.core.PeerGroup;
+import com.syscoin.syscoinj.net.discovery.DnsDiscovery;
+import com.syscoin.syscoinj.params.MainNetParams;
+import com.syscoin.syscoinj.utils.BriefLogFormatter;
 import com.google.common.collect.Lists;
 
 import javax.swing.*;

@@ -1,16 +1,16 @@
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.*;
-import com.dogecoin.dogecoinj.kits.WalletAppKit;
-import com.dogecoin.dogecoinj.params.TestNet3Params;
-import com.dogecoin.dogecoinj.script.Script;
+import com.syscoin.syscoinj.core.*;
+import com.syscoin.syscoinj.kits.WalletAppKit;
+import com.syscoin.syscoinj.params.TestNet3Params;
+import com.syscoin.syscoinj.script.Script;
 
 import java.io.File;
 import java.util.List;
 
 /**
- * The following example shows how to use the by dogecoinj provided WalletAppKit.
- * The WalletAppKit class wraps the boilerplate (Peers, BlockChain, BlockStorage, Wallet) needed to set up a new SPV dogecoinj app.
+ * The following example shows how to use the by syscoinj provided WalletAppKit.
+ * The WalletAppKit class wraps the boilerplate (Peers, BlockChain, BlockStorage, Wallet) needed to set up a new SPV syscoinj app.
  * 
  * In this example we also define a WalletEventListener class with implementors that are called when the wallet changes (for example sending/receiving money)
  */
@@ -26,11 +26,11 @@ public class Kit {
         // While developing your application you probably want to use the Regtest mode and run your local bitcoin network. Run bitcoind with the -regtest flag
         // To test you app with a real network you can use the testnet. The testnet is an alternative bitcoin network that follows the same rules as main network. Coins are worth nothing and you can get coins for example from http://faucet.xeno-genesis.com/
         // 
-        // For more information have a look at: https://dogecoinj.github.io/testing and https://bitcoin.org/en/developer-examples#testing-applications
+        // For more information have a look at: https://syscoinj.github.io/testing and https://bitcoin.org/en/developer-examples#testing-applications
         NetworkParameters params = TestNet3Params.get();
 
         // Now we initialize a new WalletAppKit. The kit handles all the boilerplate for us and is the easiest way to get everything up and running.
-        // Have a look at the WalletAppKit documentation and its source to understand what's happening behind the scenes: https://github.com/dogecoinj/dogecoinj/blob/master/core/src/main/java/org/dogecoinj/kits/WalletAppKit.java
+        // Have a look at the WalletAppKit documentation and its source to understand what's happening behind the scenes: https://github.com/syscoinj/syscoinj/blob/master/core/src/main/java/org/syscoinj/kits/WalletAppKit.java
         WalletAppKit kit = new WalletAppKit(params, new File("."), "walletappkit-example");
 
         // In case you want to connect with your local bitcoind tell the kit to connect to localhost.
@@ -38,11 +38,11 @@ public class Kit {
         //kit.connectToLocalHost();
 
         // Now we start the kit and sync the blockchain.
-        // dogecoinj is working a lot with the Google Guava libraries. The WalletAppKit extends the AbstractIdleService. Have a look at the introduction to Guava services: https://code.google.com/p/guava-libraries/wiki/ServiceExplained
+        // syscoinj is working a lot with the Google Guava libraries. The WalletAppKit extends the AbstractIdleService. Have a look at the introduction to Guava services: https://code.google.com/p/guava-libraries/wiki/ServiceExplained
         kit.startAsync();
         kit.awaitRunning();
 
-        // To observe wallet events (like coins received) we implement a EventListener class that extends the AbstractWalletEventListener dogecoinj then calls the different functions from the EventListener class
+        // To observe wallet events (like coins received) we implement a EventListener class that extends the AbstractWalletEventListener syscoinj then calls the different functions from the EventListener class
         WalletListener wListener = new WalletListener();
         kit.wallet().addEventListener(wListener);
 

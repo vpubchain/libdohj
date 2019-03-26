@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.*;
-import com.dogecoin.dogecoinj.params.TestNet3Params;
-import com.dogecoin.dogecoinj.store.BlockStore;
-import com.dogecoin.dogecoinj.store.MemoryBlockStore;
+import com.syscoin.syscoinj.core.*;
+import com.syscoin.syscoinj.params.TestNet3Params;
+import com.syscoin.syscoinj.store.BlockStore;
+import com.syscoin.syscoinj.store.MemoryBlockStore;
 
 import java.io.File;
 import java.net.InetAddress;

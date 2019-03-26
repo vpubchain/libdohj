@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.Wallet;
+import com.syscoin.syscoinj.core.Wallet;
 
 import java.io.File;
 

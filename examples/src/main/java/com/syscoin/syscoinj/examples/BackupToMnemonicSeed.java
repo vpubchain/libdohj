@@ -1,9 +1,9 @@
-package com.dogecoin.dogecoinj.examples;
+package com.syscoin.syscoinj.examples;
 
-import com.dogecoin.dogecoinj.core.NetworkParameters;
-import com.dogecoin.dogecoinj.core.Wallet;
-import com.dogecoin.dogecoinj.params.TestNet3Params;
-import com.dogecoin.dogecoinj.wallet.DeterministicSeed;
+import com.syscoin.syscoinj.core.NetworkParameters;
+import com.syscoin.syscoinj.core.Wallet;
+import com.syscoin.syscoinj.params.TestNet3Params;
+import com.syscoin.syscoinj.wallet.DeterministicSeed;
 import com.google.common.base.Joiner;
 
 /**

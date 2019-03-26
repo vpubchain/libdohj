@@ -8,7 +8,7 @@ package org.bitcoinj.core;
 import org.libdohj.core.AltcoinSerializer;
 import java.io.IOException;
 import java.math.BigInteger;
-import org.libdohj.params.DogecoinMainNetParams;
+import org.libdohj.params.SyscoinMainNetParams;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,8 +21,8 @@ import org.junit.Test;
  *
  * @author jrn
  */
-public class DogecoinBlockTest {
-    private final NetworkParameters params = DogecoinMainNetParams.get();
+public class SyscoinBlockTest {
+    private final NetworkParameters params = SyscoinMainNetParams.get();
 
     @Before
     public void setUp() throws Exception {
