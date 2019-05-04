@@ -35,7 +35,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
         id = ID_SYSCOIN_TESTNET;
 
         packetMagic = 0xcee2cafe;
-        maxTarget = Utils.decodeCompactBits(0x1e0ffff0);
+        maxTarget = Utils.decodeCompactBits(0x1e0fffffL);
         port = 18369;
         addressHeader = 65;
         p2shHeader = 196;
