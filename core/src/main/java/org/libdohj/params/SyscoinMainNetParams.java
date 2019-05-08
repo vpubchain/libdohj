@@ -20,7 +20,7 @@ import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Utils;
 
 import static com.google.common.base.Preconditions.checkState;
-
+import java.math.BigInteger;
 /**
  * Parameters for the main Syscoin production network on which people trade
  * goods and services.
