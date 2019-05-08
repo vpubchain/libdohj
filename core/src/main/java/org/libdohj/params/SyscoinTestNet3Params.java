@@ -18,7 +18,7 @@
 package org.libdohj.params;
 
 import org.bitcoinj.core.Utils;
-
+import java.math.BigInteger;
 import static com.google.common.base.Preconditions.checkState;
 /**
  * Parameters for the Syscoin testnet, a separate public network that has
