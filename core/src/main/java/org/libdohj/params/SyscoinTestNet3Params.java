@@ -75,7 +75,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
 
     @Override
     public boolean allowMinDifficultyBlocks() {
-        return true;
+        return false;
     }
 
     @Override
