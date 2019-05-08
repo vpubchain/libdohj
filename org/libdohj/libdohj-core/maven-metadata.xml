@@ -3,12 +3,13 @@
   <groupId>org.libdohj</groupId>
   <artifactId>libdohj-core</artifactId>
   <versioning>
-    <release>0.15.5-R</release>
+    <release>0.15.6-R</release>
     <versions>
       <version>0.15.3-R</version>
       <version>0.15.4-R</version>
       <version>0.15.5-R</version>
+      <version>0.15.6-R</version>
     </versions>
-    <lastUpdated>20190504010042</lastUpdated>
+    <lastUpdated>20190508190212</lastUpdated>
   </versioning>
 </metadata>
