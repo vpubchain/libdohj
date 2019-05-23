@@ -80,7 +80,7 @@ public abstract class AbstractSyscoinParams extends NetworkParameters implements
     public static final int SYSCOIN_TARGET_TIMESPAN = 6 * 60 * 60; // 6h retarget
     public static final int SYSCOIN_TARGET_SPACING = 1 * 60;  // 1 minute per block.
     public static final int SYSCOIN_INTERVAL = SYSCOIN_TARGET_TIMESPAN / SYSCOIN_TARGET_SPACING;
-
+    private static final int BLOCK_VERSION_FLAG_AUXPOW = 0x00000100;
     protected Logger log = LoggerFactory.getLogger(AbstractSyscoinParams.class);
 
     private static final Coin BASE_SUBSIDY   = COIN.multiply(500000);
@@ -236,9 +236,9 @@ public abstract class AbstractSyscoinParams extends NetworkParameters implements
 
     @Override
     public boolean isAuxPoWBlockVersion(long version) {
-        // every block other than genesis should have auxpow information
-        return version != 1;
+        return (version & BLOCK_VERSION_FLAG_AUXPOW) > 0;
     }
+       
 
 
     private static class CheckpointEncounteredException extends Exception {
