@@ -49,15 +49,15 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         bip32HeaderP2WPKHpub = 0x04b24746; // The 4 byte header that serializes in base58 to "zpub".
         bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
 
-        genesisBlock.setDifficultyTarget(0x1e0ffff0L);
+        genesisBlock.setDifficultyTarget(0x1e0fffffL);
         genesisBlock.setTime(1552606661L);
-        genesisBlock.setNonce(943747L);
+        genesisBlock.setNonce(651899L);
         id = ID_SYSCOIN_MAINNET;
         subsidyDecreaseBlockCount = 100000;
         spendableCoinbaseDepth = 100;
 
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("000007e0aeb37995d0c0ae8ad49fb7ae17eba65167501f85d40d736d67e754c3"),
+        checkState(genesisHash.equals("00000448444b0b3ddf48863024870d158bf48ce7f02a1d3093b01a84c1c1da42"),
                 genesisHash);
 
         majorityEnforceBlockUpgrade = MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
@@ -68,7 +68,7 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         // transactions are handled. Duplicated transactions could occur in the case where a coinbase had the same
         // extraNonce and the same outputs but appeared at different heights, and greatly complicated re-org handling.
         // Having these here simplifies block connection logic considerably.
-        checkpoints.put(    0, Sha256Hash.wrap("000007e0aeb37995d0c0ae8ad49fb7ae17eba65167501f85d40d736d67e754c3"));
+        checkpoints.put(    0, Sha256Hash.wrap("00000448444b0b3ddf48863024870d158bf48ce7f02a1d3093b01a84c1c1da42"));
         /*checkpoints.put( 42279, Sha256Hash.wrap("8444c3ef39a46222e87584ef956ad2c9ef401578bd8b51e8e4b9a86ec3134d3a"));
         checkpoints.put( 42400, Sha256Hash.wrap("557bb7c17ed9e6d4a6f9361cfddf7c1fc0bdc394af7019167442b41f507252b4"));
         checkpoints.put(104679, Sha256Hash.wrap("35eb87ae90d44b98898fec8c39577b76cb1eb08e1261cfc10706c8ce9a1d01cf"));
