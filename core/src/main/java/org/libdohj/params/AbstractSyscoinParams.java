@@ -109,7 +109,7 @@ public abstract class AbstractSyscoinParams extends NetworkParameters implements
 
     @Override
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
-                                           final BlockStore blockStore) throws VerificationException, BlockStoreException {
+        final BlockStore blockStore) throws VerificationException, BlockStoreException {
         final Block prev = storedPrev.getHeader();
 
         // Is this supposed to be a difficulty transition point?
@@ -209,12 +209,6 @@ public abstract class AbstractSyscoinParams extends NetworkParameters implements
     public int getChainID() {
         return AUXPOW_CHAIN_ID;
     }
-
-    /**
-     * Whether this network has special rules to enable minimum difficulty blocks
-     * after a long interval between two blocks (i.e. testnet).
-     */
-    public abstract boolean allowMinDifficultyBlocks();
 
     /**
      * Get the hash to use for a block.

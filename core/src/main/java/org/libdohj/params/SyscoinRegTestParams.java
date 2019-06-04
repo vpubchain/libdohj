@@ -92,10 +92,6 @@ public class SyscoinRegTestParams extends SyscoinTestNet3Params {
                     Long.toHexString(nextBlock.getDifficultyTarget()) + " vs " + Long.toHexString(prev.getDifficultyTarget()));
     }
 
-    @Override
-    public boolean allowMinDifficultyBlocks() {
-        return false;
-    }
 
     @Override
     public boolean isTestNet() {

@@ -104,10 +104,6 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         return instance;
     }
 
-    @Override
-    public boolean allowMinDifficultyBlocks() {
-        return false;
-    }
 
     @Override
     public String getPaymentProtocolId() {
