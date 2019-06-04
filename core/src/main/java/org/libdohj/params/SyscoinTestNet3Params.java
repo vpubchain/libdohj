@@ -17,9 +17,16 @@
 
 package org.libdohj.params;
 
-import org.bitcoinj.core.Utils;
-import java.math.BigInteger;
+
+import org.bitcoinj.core.Block;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.StoredBlock;
+import org.bitcoinj.core.VerificationException;
+import org.bitcoinj.store.BlockStore;
+import org.bitcoinj.store.BlockStoreException;
+
 import static com.google.common.base.Preconditions.checkState;
+import java.math.BigInteger;
 /**
  * Parameters for the Syscoin testnet, a separate public network that has
  * relaxed rules suitable for development and testing of applications and new
@@ -75,8 +82,8 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
 
     @Override
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
-        final BlockStore blockStore) throws VerificationException, BlockStoreException {
-        if (!isDifficultyTransitionPoint(storedPrev.getHeight()) && nextBlock.getTime().after(testnetDiffDate)) {
+                                           final BlockStore blockStore) throws VerificationException, BlockStoreException {
+        if (!isDifficultyTransitionPoint(storedPrev.getHeight())) {
             Block prev = storedPrev.getHeader();
 
             // After 15th February 2012 the rules on the testnet change to avoid people running up the difficulty
