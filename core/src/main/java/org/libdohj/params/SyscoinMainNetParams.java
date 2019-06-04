@@ -50,14 +50,14 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
 
         genesisBlock.setDifficultyTarget(0x1e0fffffL);
-        genesisBlock.setTime(1552606662L);
-        genesisBlock.setNonce(673052L);
+        genesisBlock.setTime(1559520000L);
+        genesisBlock.setNonce(1372898L);
         id = ID_SYSCOIN_MAINNET;
         subsidyDecreaseBlockCount = 100000;
         spendableCoinbaseDepth = 100;
 
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("000001cab6418dbdbdc0255b5216938d0b1d93e9c4fbce43a1a8886eb2b4356f"),
+        checkState(genesisHash.equals("0000022642db0346b6e01c2a397471f4f12e65d4f4251ec96c1f85367a61a7ab"),
                 genesisHash);
 
         majorityEnforceBlockUpgrade = MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
@@ -68,7 +68,8 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         // transactions are handled. Duplicated transactions could occur in the case where a coinbase had the same
         // extraNonce and the same outputs but appeared at different heights, and greatly complicated re-org handling.
         // Having these here simplifies block connection logic considerably.
-        checkpoints.put(    0, Sha256Hash.wrap("000001cab6418dbdbdc0255b5216938d0b1d93e9c4fbce43a1a8886eb2b4356f"));
+        checkpoints.put(    0, Sha256Hash.wrap("0000022642db0346b6e01c2a397471f4f12e65d4f4251ec96c1f85367a61a7ab"));
+        checkpoints.put(    250, Sha256Hash.wrap("00000c9ec0f9d60ce297bf9f9cbe1f2eb39165a0d3f69c1c55fc3f6680fe45c8"));
         /*checkpoints.put( 42279, Sha256Hash.wrap("8444c3ef39a46222e87584ef956ad2c9ef401578bd8b51e8e4b9a86ec3134d3a"));
         checkpoints.put( 42400, Sha256Hash.wrap("557bb7c17ed9e6d4a6f9361cfddf7c1fc0bdc394af7019167442b41f507252b4"));
         checkpoints.put(104679, Sha256Hash.wrap("35eb87ae90d44b98898fec8c39577b76cb1eb08e1261cfc10706c8ce9a1d01cf"));
@@ -88,12 +89,12 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         checkpoints.put(371337, Sha256Hash.wrap("60323982f9c5ff1b5a954eac9dc1269352835f47c2c5222691d80f0d50dcf053"));
         checkpoints.put(400002, Sha256Hash.wrap("a5021d69a83f39aef10f3f24f932068d6ff322c654d20562def3fac5703ce3aa"));*/
 
-        /*dnsSeeds = new String[] {
-                "seed.syscoin.com",
-                "seed.multisyscoin.org",
-                "seed2.multisyscoin.org",
-                "seed.syscoinr.syscoin.com"
-        };*/
+        dnsSeeds = new String[] {
+                "seed1.syscoin.org",
+                "seed2.syscoin.org",
+                "seed3.syscoin.org",
+                "seed4.syscoin.org"
+        };
     }
 
     private static SyscoinMainNetParams instance;
