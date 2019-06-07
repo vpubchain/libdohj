@@ -70,6 +70,9 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         // Having these here simplifies block connection logic considerably.
         checkpoints.put(    0, Sha256Hash.wrap("0000022642db0346b6e01c2a397471f4f12e65d4f4251ec96c1f85367a61a7ab"));
         checkpoints.put(    250, Sha256Hash.wrap("00000c9ec0f9d60ce297bf9f9cbe1f2eb39165a0d3f69c1c55fc3f6680fe45c8"));
+        checkpoints.put(    5000, Sha256Hash.wrap("eef3554a3f467bcdc7570f799cecdb262058cecf34d555827c99b5719b1df4f6"));
+        checkpoints.put(    10000, Sha256Hash.wrap("e44257e8e027e8a67fd647c54e1bd6976988d75b416affabe3f82fd87a67f5ff"));
+
         /*checkpoints.put( 42279, Sha256Hash.wrap("8444c3ef39a46222e87584ef956ad2c9ef401578bd8b51e8e4b9a86ec3134d3a"));
         checkpoints.put( 42400, Sha256Hash.wrap("557bb7c17ed9e6d4a6f9361cfddf7c1fc0bdc394af7019167442b41f507252b4"));
         checkpoints.put(104679, Sha256Hash.wrap("35eb87ae90d44b98898fec8c39577b76cb1eb08e1261cfc10706c8ce9a1d01cf"));
