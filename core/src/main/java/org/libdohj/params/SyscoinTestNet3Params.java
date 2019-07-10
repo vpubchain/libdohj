@@ -98,11 +98,11 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
                 StoredBlock cursor = storedPrev;
                 while (!cursor.getHeader().equals(getGenesisBlock()) &&
                            cursor.getHeight() % getInterval() != 0 &&
-                           cursor.getHeader().getDifficultyTargetAsInteger().equals(getMaxTarget()))
+                           cursor.getHeader().getDifficultyTargetAsInteger().equals(maxTarget))
                         cursor = cursor.getPrev(blockStore);
                 BigInteger cursorTarget = cursor.getHeader().getDifficultyTargetAsInteger();
                 BigInteger newTarget = nextBlock.getDifficultyTargetAsInteger();
-                if (!cursorTarget.equals(newTarget))
+                if (!cursorTarget.equals(newTarget))    
                         throw new VerificationException("Testnet block transition that is not allowed: " +
                         Long.toHexString(cursor.getHeader().getDifficultyTarget()) + " vs " +
                         Long.toHexString(nextBlock.getDifficultyTarget()));
