@@ -24,7 +24,7 @@ import org.bitcoinj.core.StoredBlock;
 import org.bitcoinj.core.VerificationException;
 import org.bitcoinj.store.BlockStore;
 import org.bitcoinj.store.BlockStoreException;
-
+import org.bitcoinj.core.Utils;
 import static com.google.common.base.Preconditions.checkState;
 import java.math.BigInteger;
 /**
