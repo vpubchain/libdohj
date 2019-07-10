@@ -32,7 +32,7 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
 
     public SyscoinMainNetParams() {
         super();
-        maxTarget = new BigInteger("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16);
+        maxTarget = Utils.decodeCompactBits(0x1e0fffffL);
 
 
         dumpedPrivateKeyHeader = 128; //This is always addressHeader + 128

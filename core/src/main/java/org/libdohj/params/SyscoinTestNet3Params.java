@@ -42,7 +42,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
         id = ID_SYSCOIN_TESTNET;
 
         packetMagic = 0xcee2cafe;
-        maxTarget = new BigInteger("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16);
+        maxTarget = Utils.decodeCompactBits(0x1e0fffffL);
         port = 18369;
         addressHeader = 65;
         p2shHeader = 196;
@@ -98,7 +98,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
                 StoredBlock cursor = storedPrev;
                 while (!cursor.getHeader().equals(getGenesisBlock()) &&
                            cursor.getHeight() % getInterval() != 0 &&
-                           cursor.getHeader().getDifficultyTargetAsInteger().equals(maxTarget))
+                           cursor.getHeader().getDifficultyTargetAsInteger().equals(this.maxTarget))
                         cursor = cursor.getPrev(blockStore);
                 BigInteger cursorTarget = cursor.getHeader().getDifficultyTargetAsInteger();
                 BigInteger newTarget = nextBlock.getDifficultyTargetAsInteger();
