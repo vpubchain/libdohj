@@ -92,7 +92,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
             final long timeDelta = nextBlock.getTimeSeconds() - prev.getTimeSeconds();
             // There is an integer underflow bug in bitcoin-qt that means mindiff blocks are accepted when time
             // goes backwards.
-            if (timeDelta >= 0 && timeDelta <= TARGET_SPACING * 2) {
+            if (timeDelta >= 0 && timeDelta <= SYSCOIN_TARGET_SPACING * 2) {
                 // Walk backwards until we find a block that doesn't have the easiest proof of work, then check
                 // that difficulty is equal to that one.
                 StoredBlock cursor = storedPrev;
