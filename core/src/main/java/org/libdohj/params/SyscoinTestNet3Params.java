@@ -69,6 +69,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
         bip32HeaderP2PKHpriv = 0x0488ade4; // The 4 byte header that serializes in base58 to "xprv"
         bip32HeaderP2WPKHpub = 0x04b24746; // The 4 byte header that serializes in base58 to "zpub".
         bip32HeaderP2WPKHpriv = 0x04b2430c; // The 4 byte header that serializes in base58 to "zprv"
+        nBridgeStartBlock = 1000;
     }
 
     private static SyscoinTestNet3Params instance;

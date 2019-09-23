@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.libdohj</groupId>
     <artifactId>libdohj-core</artifactId>
-    <version>0.15.20-R</version>
+    <version>0.15.21-R</version>
     <packaging>jar</packaging>
 
     <licenses>

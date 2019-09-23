@@ -85,10 +85,11 @@ public abstract class AbstractSyscoinParams extends NetworkParameters implements
 
     private static final Coin BASE_SUBSIDY   = COIN.multiply(500000);
     private static final Coin STABLE_SUBSIDY = COIN.multiply(10000);
-
+    int nBridgeStartBlock;
     public AbstractSyscoinParams() {
         super();
         interval = SYSCOIN_INTERVAL;
+        nBridgeStartBlock = 200000;  // HF activation of sysethereum bridge
         targetTimespan = SYSCOIN_TARGET_TIMESPAN;
     }
 
@@ -148,10 +149,18 @@ public abstract class AbstractSyscoinParams extends NetworkParameters implements
         int timespan = (int) (prev.getTimeSeconds() - blockIntervalAgo.getTimeSeconds());
         // Limit the adjustment step.
         final int targetTimespan = this.getTargetTimespan();
-        if (timespan < targetTimespan / 4)
-            timespan = targetTimespan / 4;
-        if (timespan > targetTimespan * 4)
-            timespan = targetTimespan * 4;
+        if(storedPrev.getHeight() >= nBridgeStartBlock){
+            if (timespan < 17280)
+                timespan = 17280;
+            if (timespan > 27000)
+                timespan = 27000;
+        }
+        else {
+            if (timespan < targetTimespan / 4)
+                timespan = targetTimespan / 4;
+            if (timespan > targetTimespan * 4)
+                timespan = targetTimespan * 4;
+        }
 
         BigInteger newTarget = Utils.decodeCompactBits(prev.getDifficultyTarget());
         newTarget = newTarget.multiply(BigInteger.valueOf(timespan));

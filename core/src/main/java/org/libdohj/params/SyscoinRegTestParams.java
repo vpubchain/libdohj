@@ -42,6 +42,7 @@ public class SyscoinRegTestParams extends SyscoinTestNet3Params {
         port = 18444;
         id = ID_SYSCOIN_REGTEST;
         packetMagic = 0xfabfb5da;
+        nBridgeStartBlock = 100;
     }
 
     @Override
