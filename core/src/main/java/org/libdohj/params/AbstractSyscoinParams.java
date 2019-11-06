@@ -16,7 +16,6 @@
 
 package org.libdohj.params;
 
-import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
@@ -26,9 +25,6 @@ import org.bitcoinj.core.*;
 
 import static com.google.common.base.Preconditions.checkState;
 import static org.bitcoinj.core.Coin.COIN;
-
-import org.bitcoinj.script.Script;
-import org.bitcoinj.script.ScriptOpCodes;
 
 import org.bitcoinj.store.BlockStore;
 import org.bitcoinj.store.BlockStoreException;
