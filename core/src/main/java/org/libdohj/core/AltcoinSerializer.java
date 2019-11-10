@@ -60,8 +60,12 @@ public class AltcoinSerializer extends BitcoinSerializer {
         names.put(SendHeadersMessage.class, "sendheaders");
         // SYSCOIN specific
         names.put(SendCompactBlocksMessage.class, "sendcmpct");
+        names.put(SendCompactBlocksMessage.class, "cmpctblock");
+        names.put(SendCompactBlocksMessage.class, "getblocktxn");
+        names.put(SendCompactBlocksMessage.class, "blocktxn");
         names.put(MasternodeBroadcast.class, "mnb");
         names.put(MasternodePing.class, "mnp");
+        names.put(MasternodePing.class, "dseg");
         names.put(MasternodePaymentVote.class, "mnw");
         names.put(MasternodeVerification.class, "mnv");
         names.put(SporkMessage.class, "spork");
@@ -166,25 +170,33 @@ public class AltcoinSerializer extends BitcoinSerializer {
             return new MasternodeBroadcast(params, payloadBytes);
         } else if (command.equals("mnw")){
             return new MasternodePaymentVote(params, payloadBytes);
-        } else if( command.equals("mnp")) {
+        } else if (command.equals("mnp")) {
+            return new MasternodePing(params, payloadBytes);
+        } else if (command.equals("dseg")) {
             return new MasternodePing(params, payloadBytes);
         } else if (command.equals("mnv")) {
             return new MasternodeVerification(params, payloadBytes);
         } else if (command.equals("spork")) {
             return new SporkMessage(params, payloadBytes);
-        } else if(command.equals("ssc")) {
+        } else if (command.equals("ssc")) {
             return new SyncStatusCount(params, payloadBytes);
-        } else if(command.equals("sendcmpct")) {
+        } else if (command.equals("sendcmpct")) {
             return new SendCompactBlocksMessage(params, payloadBytes);
-        } else if(command.equals("getsporks")) {
+        } else if (command.equals("cmpctblock")) {
+            return new SendCompactBlocksMessage(params, payloadBytes);
+        } else if (command.equals("getblocktxn")) {
+            return new SendCompactBlocksMessage(params, payloadBytes);
+        } else if (command.equals("blocktxn")) {
+            return new SendCompactBlocksMessage(params, payloadBytes);
+        } else if (command.equals("getsporks")) {
             return new GetSporksMessage(params, payloadBytes);
-        } else if(command.equals("govsync")) {
+        } else if (command.equals("govsync")) {
             return new GovernanceSyncMessage(params, payloadBytes);
-        } else if(command.equals("govobj")) {
+        } else if (command.equals("govobj")) {
             return new GovernanceObject(params, payloadBytes);
-        } else if(command.equals("govobjvote")) {
+        } else if (command.equals("govobjvote")) {
             return new GovernanceVote(params, payloadBytes);
-        } else if(command.equals("mnget")) {
+        } else if (command.equals("mnget")) {
             return new MasternodePaymentVote(params, payloadBytes);
         } else {
             log.warn("No support for deserializing message with name {}", command);
