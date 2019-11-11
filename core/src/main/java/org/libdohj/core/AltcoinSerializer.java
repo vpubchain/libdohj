@@ -9,7 +9,6 @@ import org.bitcoinj.core.MasternodeBroadcast;
 import org.bitcoinj.core.MasternodePaymentVote;
 import org.bitcoinj.core.MasternodePing;
 import org.bitcoinj.core.MasternodeVerification;
-import org.bitcoinj.core.SendCompactBlocksMessage;
 import org.bitcoinj.core.SporkMessage;
 import org.bitcoinj.core.SyncStatusCount;
 import org.bitcoinj.core.Utils;
@@ -59,10 +58,6 @@ public class AltcoinSerializer extends BitcoinSerializer {
         names.put(UTXOsMessage.class, "utxos");
         names.put(SendHeadersMessage.class, "sendheaders");
         // SYSCOIN specific
-        names.put(SendCompactBlocksMessage.class, "sendcmpct");
-        names.put(SendCompactBlocksMessage.class, "cmpctblock");
-        names.put(SendCompactBlocksMessage.class, "getblocktxn");
-        names.put(SendCompactBlocksMessage.class, "blocktxn");
         names.put(MasternodeBroadcast.class, "mnb");
         names.put(MasternodePing.class, "mnp");
         names.put(MasternodePing.class, "dseg");
@@ -180,14 +175,6 @@ public class AltcoinSerializer extends BitcoinSerializer {
             return new SporkMessage(params, payloadBytes);
         } else if (command.equals("ssc")) {
             return new SyncStatusCount(params, payloadBytes);
-        } else if (command.equals("sendcmpct")) {
-            return new SendCompactBlocksMessage(params, payloadBytes);
-        } else if (command.equals("cmpctblock")) {
-            return new SendCompactBlocksMessage(params, payloadBytes);
-        } else if (command.equals("getblocktxn")) {
-            return new SendCompactBlocksMessage(params, payloadBytes);
-        } else if (command.equals("blocktxn")) {
-            return new SendCompactBlocksMessage(params, payloadBytes);
         } else if (command.equals("getsporks")) {
             return new GetSporksMessage(params, payloadBytes);
         } else if (command.equals("govsync")) {

@@ -517,8 +517,6 @@ public class Peer extends PeerSocketHandler {
         } else if (m instanceof SendHeadersMessage) {
             // We ignore this message, because we don't announce new blocks.
         }
-        else if(m instanceof org.bitcoinj.core.SendCompactBlocksMessage) {
-        }
         else if(m instanceof org.bitcoinj.core.MasternodeBroadcast) {
         }
         else if(m instanceof org.bitcoinj.core.MasternodePing) {
