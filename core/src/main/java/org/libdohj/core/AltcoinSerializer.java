@@ -103,10 +103,6 @@ public class AltcoinSerializer extends BitcoinSerializer {
                     " vs " + HEX.encode(header.checksum));
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Received {} byte '{}' message: {}", header.size, header.command,
-                    HEX.encode(payloadBytes));
-        }
 
         try {
             return makeMessage(header.command, header.size, payloadBytes, hash, header.checksum);
