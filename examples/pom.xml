@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.syscoin</groupId>
         <artifactId>syscoinj-parent</artifactId>
-        <version>0.15.1-RELEASE</version>
+        <version>0.15.26-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
