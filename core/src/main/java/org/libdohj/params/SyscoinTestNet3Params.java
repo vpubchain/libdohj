@@ -49,13 +49,13 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
         p2shHeader = 196;
         dumpedPrivateKeyHeader = 239;
         segwitAddressHrp = "tsys";
-        genesisBlock.setTime(1566533452L);
+        genesisBlock.setTime(1574100000L);
         genesisBlock.setDifficultyTarget(0x1e0fffffL);
-        genesisBlock.setNonce(102994L);
+        genesisBlock.setNonce(683742L);
         spendableCoinbaseDepth = 100;
         subsidyDecreaseBlockCount = 210000;
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("00000bc2aa4429e2ac21bb35e7158e73af6947e06ad6c2380d3881c1f3879e08"));
+        checkState(genesisHash.equals("00000f9699028b567867c6363cde3dce894235415aedb33b7a0f9e8d35630da9"));
 
         majorityEnforceBlockUpgrade = TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
         majorityRejectBlockOutdated = TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED;
@@ -65,7 +65,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
             "testseed.jrn.me.uk"
         };*/
 
-        checkpoints.put(    40000, Sha256Hash.wrap("000001032dae179a3e0e97b7a1c8a49f6a6a3313f964a105d38e074d3eb373d4"));
+       // checkpoints.put(    40000, Sha256Hash.wrap("000001032dae179a3e0e97b7a1c8a49f6a6a3313f964a105d38e074d3eb373d4"));
 
         bip32HeaderP2PKHpub = 0x0488b21e; // The 4 byte header that serializes in base58 to "xpub".
         bip32HeaderP2PKHpriv = 0x0488ade4; // The 4 byte header that serializes in base58 to "xprv"
@@ -94,7 +94,7 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
             final long timeDelta = nextBlock.getTimeSeconds() - prev.getTimeSeconds();
             // There is an integer underflow bug in bitcoin-qt that means mindiff blocks are accepted when time
             // goes backwards.
-            if (timeDelta >= 0 && timeDelta <= SYSCOIN_TARGET_SPACING * 2) {
+            if (timeDelta >= 0 && timeDelta <= SYSCOIN_TARGET_SPACING * 20) {
                 // Walk backwards until we find a block that doesn't have the easiest proof of work, then check
                 // that difficulty is equal to that one.
                 StoredBlock cursor = storedPrev;
