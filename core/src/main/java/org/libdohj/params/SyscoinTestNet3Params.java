@@ -49,13 +49,13 @@ public class SyscoinTestNet3Params extends AbstractSyscoinParams {
         p2shHeader = 196;
         dumpedPrivateKeyHeader = 239;
         segwitAddressHrp = "tsys";
-        genesisBlock.setTime(1574100000L);
+        genesisBlock.setTime(1559520000L);
         genesisBlock.setDifficultyTarget(0x1e0fffffL);
-        genesisBlock.setNonce(683742L);
+        genesisBlock.setNonce(1372898L);
         spendableCoinbaseDepth = 100;
         subsidyDecreaseBlockCount = 210000;
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("00000f9699028b567867c6363cde3dce894235415aedb33b7a0f9e8d35630da9"));
+        checkState(genesisHash.equals("0000022642db0346b6e01c2a397471f4f12e65d4f4251ec96c1f85367a61a7ab"));
 
         majorityEnforceBlockUpgrade = TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE;
         majorityRejectBlockOutdated = TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED;
