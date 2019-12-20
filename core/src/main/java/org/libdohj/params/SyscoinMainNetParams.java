@@ -77,6 +77,8 @@ public class SyscoinMainNetParams extends AbstractSyscoinParams {
         checkpoints.put(    150000, Sha256Hash.wrap("73850eb99a6c32b4bfd67a26a7466ce3d0b4412d4174590c501e567c99f038fd"));
         checkpoints.put(    200000, Sha256Hash.wrap("a28fe36c63acb38065dadf09d74de5fdc1dac6433c204b215b37bab312dfab0d"));
         checkpoints.put(    240000, Sha256Hash.wrap("906918ba0cbfbd6e4e4e00d7d47d08bef3e409f47b59cb5bd3303f5276b88f0f"));
+        checkpoints.put(    280000, Sha256Hash.wrap("651375427865345d37a090ca561c1ed135c6b8dafa591a59f2abf1eb26dfd538"));
+        checkpoints.put(    292956, Sha256Hash.wrap("ae6dca1b9dd7adcb8a11c8ea7f9fe72bb47ff6e4156e1d172e2a8612b18a319d"));
 
         dnsSeeds = new String[] {
                 "seed1.syscoin.org",
