@@ -85,7 +85,7 @@ public abstract class AbstractSyscoinParams extends NetworkParameters implements
     public AbstractSyscoinParams() {
         super();
         interval = SYSCOIN_INTERVAL;
-        nBridgeStartBlock = 275000;  // HF activation of sysethereum bridge
+        nBridgeStartBlock = 348000;  // HF activation of sysethereum bridge
         targetTimespan = SYSCOIN_TARGET_TIMESPAN;
     }
 
