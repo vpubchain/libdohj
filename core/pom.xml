@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.libdohj</groupId>
     <artifactId>libdohj-core</artifactId>
-    <version>0.15.31-R</version>
+    <version>0.15.32-R</version>
     <packaging>jar</packaging>
 
     <licenses>
@@ -99,7 +99,7 @@
         <dependency>
             <groupId>org.bitcoinj</groupId>
             <artifactId>bitcoinj-core</artifactId>
-            <version>0.15.5</version>
+            <version>0.15.6</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
